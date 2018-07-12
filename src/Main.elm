@@ -234,18 +234,19 @@ view model =
             ]
         ]
         {-
-           [ model.exercises
-               |> List.head
-               |> Maybe.map (viewExercise model.currentExerciseState model.answerInput)
-               |> Maybe.withDefault (H.text "")
-           , model.lastAttempt
-               |> Maybe.map (viewLastAttempt model.lastAttemptState)
-               |> Maybe.withDefault (H.text "")
-           ]
+           -- DEBUG
+           (model.exercises
+               |> List.map (viewExercise model.currentExerciseState model.answerInput)
+           )
         -}
-        (model.exercises
-            |> List.map (viewExercise model.currentExerciseState model.answerInput)
-        )
+        [ model.exercises
+            |> List.head
+            |> Maybe.map (viewExercise model.currentExerciseState model.answerInput)
+            |> Maybe.withDefault (H.text "")
+        , model.lastAttempt
+            |> Maybe.map (viewLastAttempt model.lastAttemptState)
+            |> Maybe.withDefault (H.text "")
+        ]
 
 
 viewExercise : Animation.State -> String -> Exercise -> Html Msg
