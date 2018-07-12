@@ -1,9 +1,5 @@
 module Exercise exposing (..)
 
-import Html as H exposing (Html)
-import Html.Attributes as HA
-import Html.Events as HE
-import Json.Decode as JD
 import Random.Extra
 import Random.Pcg as Random exposing (Generator)
 import Random.Pcg.Extra as RandomExtra
@@ -14,112 +10,6 @@ type alias Exercise =
     , code : List String
     , answer : String
     }
-
-
-type alias Config msg =
-    { onInput : String -> msg
-    , onSubmit : msg
-    , value : String
-    }
-
-
-view : Config msg -> Exercise -> Html msg
-view { onInput, onSubmit, value } { code } =
-    H.div
-        [ HA.style
-            [ ( "background-color", "#74bdfe" )
-            , ( "padding", "16px" )
-            , ( "box-shadow", "0 0 16px 0 #74bdfe" )
-            , ( "margin", "16px" )
-            ]
-        ]
-        [ H.pre
-            [ HA.style
-                [ ( "font-family", "Iosevka" )
-                , ( "font-weight", "bold" )
-                ]
-            ]
-            [ H.text (code |> String.join "\n") ]
-        , H.text "="
-        , H.input
-            [ HE.onInput onInput
-            , onEnter onSubmit
-            , HA.placeholder "?"
-            , HA.value value
-            , HA.style
-                [ ( "font-family", "Iosevka" )
-                , ( "margin-left", "8px" )
-                , ( "font-size", "24px" )
-                ]
-            , HA.id "current-answer"
-            ]
-            []
-        ]
-
-
-viewLastAttempt : Exercise -> Html msg
-viewLastAttempt { code, answer } =
-    H.div
-        [ HA.style
-            [ ( "background-color", "#98cefe" )
-            , ( "padding", "16px" )
-            , ( "box-shadow", "0 0 16px 0 #98cefe" )
-            , ( "margin", "16px" )
-            , ( "animation", "shake 5s" )
-            , ( "animation-iteration-count", "1" )
-            , ( "animation-fill-mode", "forwards" )
-            ]
-        ]
-        [ H.pre
-            [ HA.style
-                [ ( "font-family", "Iosevka" )
-                , ( "font-weight", "bold" )
-                ]
-            ]
-            [ H.text (code |> String.join "\n") ]
-        , H.pre
-            [ HA.style
-                [ ( "font-family", "Iosevka" )
-                , ( "font-weight", "bold" )
-                , ( "background-color", "rgba(255,0,0,0.3)" )
-                , ( "padding", "8px" )
-                ]
-            ]
-            [ H.text ("= " ++ answer) ]
-        ]
-
-
-viewDebug : Exercise -> Html msg
-viewDebug { type_, code, answer } =
-    H.div
-        [ HA.style
-            [ ( "background-color", "#74bdfe" )
-            , ( "padding", "16px" )
-            , ( "box-shadow", "0 0 16px 0 #74bdfe" )
-            , ( "margin", "16px" )
-            ]
-        ]
-        [ H.strong
-            [ HA.style [ ( "color", "#fff" ) ] ]
-            [ H.text type_ ]
-        , H.pre
-            [ HA.style
-                [ ( "font-family", "Iosevka" )
-                , ( "font-weight", "bold" )
-                ]
-            ]
-            [ H.text (code |> String.join "\n") ]
-        , H.strong
-            [ HA.style [ ( "color", "#fff" ) ] ]
-            [ H.text "Answer:" ]
-        , H.pre
-            [ HA.style
-                [ ( "font-family", "Iosevka" )
-                , ( "color", "#fff" )
-                ]
-            ]
-            [ H.text answer ]
-        ]
 
 
 plus : Generator Exercise
@@ -855,20 +745,3 @@ functionIfLessThan =
         Random.Extra.smallNumber
         Random.Extra.smallNumber
         Random.Extra.smallNumber
-
-
-{-| When the enter key is released, send the `msg`.
-Otherwise, do nothing.
-Taken from elm-community/html-extra
--}
-onEnter : msg -> H.Attribute msg
-onEnter onEnterAction =
-    HE.on "keyup" <|
-        JD.andThen
-            (\keyCode ->
-                if keyCode == 13 then
-                    JD.succeed onEnterAction
-                else
-                    JD.fail (toString keyCode)
-            )
-            HE.keyCode
