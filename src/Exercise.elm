@@ -25,17 +25,40 @@ plus =
         Random.Extra.smallNumber
 
 
-minus : Generator Exercise
-minus =
-    Random.map2
-        (\num1 num2 ->
-            { type_ = "minus"
-            , code = [ toString num1 ++ " - " ++ toString num2 ]
-            , answer = toString (num1 - num2)
-            }
-        )
-        Random.Extra.smallNumber
-        Random.Extra.smallNumber
+minusPositive : Generator Exercise
+minusPositive =
+    Random.Extra.smallNumber
+        |> Random.andThen
+            (\num1 ->
+                Random.map2 (,)
+                    (Random.int num1 (num1 + 5))
+                    (Random.constant num1)
+            )
+        |> Random.map
+            (\( num1, num2 ) ->
+                { type_ = "minusPositive"
+                , code = [ toString num1 ++ " - " ++ toString num2 ]
+                , answer = toString (num1 - num2)
+                }
+            )
+
+
+minusNegative : Generator Exercise
+minusNegative =
+    Random.Extra.smallNumber
+        |> Random.andThen
+            (\num1 ->
+                Random.map2 (,)
+                    (Random.constant num1)
+                    (Random.int num1 (num1 + 5))
+            )
+        |> Random.map
+            (\( num1, num2 ) ->
+                { type_ = "minusNegative"
+                , code = [ toString num1 ++ " - " ++ toString num2 ]
+                , answer = toString (num1 - num2)
+                }
+            )
 
 
 times : Generator Exercise
@@ -47,8 +70,8 @@ times =
             , answer = toString (num1 * num2)
             }
         )
-        Random.Extra.smallNumber
-        Random.Extra.smallNumber
+        (Random.int 1 5)
+        (Random.int 1 5)
 
 
 letAndPlus : Generator Exercise
@@ -103,8 +126,8 @@ concatStrings =
             , answer = toString (string1 ++ string2)
             }
         )
-        Random.Extra.lettersString
-        Random.Extra.lettersString
+        (Random.Extra.lettersString 0 3)
+        (Random.Extra.lettersString 0 3)
 
 
 concatNumberStrings : Generator Exercise
@@ -425,8 +448,8 @@ stringEquality =
             , answer = toString (string1 == string2)
             }
         )
-        Random.Extra.possiblyEmptyLettersString
-        Random.Extra.possiblyEmptyLettersString
+        (Random.Extra.lettersString 0 4)
+        (Random.Extra.lettersString 0 4)
 
 
 stringInequality : Generator Exercise
@@ -438,8 +461,8 @@ stringInequality =
             , answer = toString (string1 /= string2)
             }
         )
-        Random.Extra.possiblyEmptyLettersString
-        Random.Extra.possiblyEmptyLettersString
+        (Random.Extra.lettersString 0 4)
+        (Random.Extra.lettersString 0 4)
 
 
 not_ : Generator Exercise
@@ -463,7 +486,7 @@ stringLength =
             , answer = toString (String.length string)
             }
         )
-        Random.Extra.possiblyEmptyLettersString
+        (Random.Extra.lettersString 0 4)
 
 
 listLength : Generator Exercise
@@ -478,82 +501,220 @@ listLength =
         Random.Extra.smallList
 
 
-stringLeft : Generator Exercise
-stringLeft =
-    Random.map2
-        (\string num ->
-            { type_ = "stringLeft"
-            , code = [ "String.left " ++ toString num ++ " " ++ toString string ]
-            , answer = toString (String.left num string)
-            }
-        )
-        Random.Extra.lettersString
-        Random.Extra.extraSmallNumber
+stringLeftWithinLimit : Generator Exercise
+stringLeftWithinLimit =
+    Random.Extra.lettersString 3 5
+        |> Random.andThen
+            (\string ->
+                Random.map2 (,)
+                    (Random.constant string)
+                    (Random.int 1 (String.length string - 1))
+            )
+        |> Random.map
+            (\( string, num ) ->
+                { type_ = "stringLeftWithinLimit"
+                , code = [ "String.left " ++ toString num ++ " " ++ toString string ]
+                , answer = toString (String.left num string)
+                }
+            )
 
 
-stringRight : Generator Exercise
-stringRight =
-    Random.map2
-        (\string num ->
-            { type_ = "stringRight"
-            , code = [ "String.right " ++ toString num ++ " " ++ toString string ]
-            , answer = toString (String.right num string)
-            }
-        )
-        Random.Extra.lettersString
-        Random.Extra.extraSmallNumber
+stringLeftOutOfLimit : Generator Exercise
+stringLeftOutOfLimit =
+    Random.Extra.lettersString 1 3
+        |> Random.andThen
+            (\string ->
+                Random.map2 (,)
+                    (Random.constant string)
+                    (Random.int (String.length string + 1) (String.length string + 3))
+            )
+        |> Random.map
+            (\( string, num ) ->
+                { type_ = "stringLeftOutOfLimit"
+                , code = [ "String.left " ++ toString num ++ " " ++ toString string ]
+                , answer = toString (String.left num string)
+                }
+            )
 
 
-stringDropLeft : Generator Exercise
-stringDropLeft =
-    Random.map2
-        (\string num ->
-            { type_ = "stringDropLeft"
-            , code = [ "String.dropLeft " ++ toString num ++ " " ++ toString string ]
-            , answer = toString (String.dropLeft num string)
-            }
-        )
-        Random.Extra.lettersString
-        Random.Extra.extraSmallNumber
+stringRightWithinLimit : Generator Exercise
+stringRightWithinLimit =
+    Random.Extra.lettersString 3 5
+        |> Random.andThen
+            (\string ->
+                Random.map2 (,)
+                    (Random.constant string)
+                    (Random.int 1 (String.length string - 1))
+            )
+        |> Random.map
+            (\( string, num ) ->
+                { type_ = "stringRightWithinLimit"
+                , code = [ "String.right " ++ toString num ++ " " ++ toString string ]
+                , answer = toString (String.right num string)
+                }
+            )
 
 
-stringDropRight : Generator Exercise
-stringDropRight =
-    Random.map2
-        (\string num ->
-            { type_ = "stringDropRight"
-            , code = [ "String.dropRight " ++ toString num ++ " " ++ toString string ]
-            , answer = toString (String.dropRight num string)
-            }
-        )
-        Random.Extra.lettersString
-        Random.Extra.extraSmallNumber
+stringRightOutOfLimit : Generator Exercise
+stringRightOutOfLimit =
+    Random.Extra.lettersString 1 3
+        |> Random.andThen
+            (\string ->
+                Random.map2 (,)
+                    (Random.constant string)
+                    (Random.int (String.length string + 1) (String.length string + 3))
+            )
+        |> Random.map
+            (\( string, num ) ->
+                { type_ = "stringRightOutOfLimit"
+                , code = [ "String.right " ++ toString num ++ " " ++ toString string ]
+                , answer = toString (String.right num string)
+                }
+            )
 
 
-listTake : Generator Exercise
-listTake =
-    Random.map2
-        (\list num ->
-            { type_ = "listTake"
-            , code = [ "List.take " ++ toString num ++ " " ++ toString list ]
-            , answer = toString (List.take num list)
-            }
-        )
-        Random.Extra.smallList
-        Random.Extra.extraSmallNumber
+stringDropLeftWithinLimit : Generator Exercise
+stringDropLeftWithinLimit =
+    Random.Extra.lettersString 3 5
+        |> Random.andThen
+            (\string ->
+                Random.map2 (,)
+                    (Random.constant string)
+                    (Random.int 1 (String.length string - 1))
+            )
+        |> Random.map
+            (\( string, num ) ->
+                { type_ = "stringDropLeftWithinLimit"
+                , code = [ "String.dropLeft " ++ toString num ++ " " ++ toString string ]
+                , answer = toString (String.dropLeft num string)
+                }
+            )
 
 
-listDrop : Generator Exercise
-listDrop =
-    Random.map2
-        (\list num ->
-            { type_ = "listDrop"
-            , code = [ "List.drop " ++ toString num ++ " " ++ toString list ]
-            , answer = toString (List.drop num list)
-            }
-        )
-        Random.Extra.smallList
-        Random.Extra.extraSmallNumber
+stringDropLeftOutOfLimit : Generator Exercise
+stringDropLeftOutOfLimit =
+    Random.Extra.lettersString 1 3
+        |> Random.andThen
+            (\string ->
+                Random.map2 (,)
+                    (Random.constant string)
+                    (Random.int (String.length string + 1) (String.length string + 3))
+            )
+        |> Random.map
+            (\( string, num ) ->
+                { type_ = "stringDropLeftOutOfLimit"
+                , code = [ "String.dropLeft " ++ toString num ++ " " ++ toString string ]
+                , answer = toString (String.dropLeft num string)
+                }
+            )
+
+
+stringDropRightWithinLimit : Generator Exercise
+stringDropRightWithinLimit =
+    Random.Extra.lettersString 3 5
+        |> Random.andThen
+            (\string ->
+                Random.map2 (,)
+                    (Random.constant string)
+                    (Random.int 1 (String.length string - 1))
+            )
+        |> Random.map
+            (\( string, num ) ->
+                { type_ = "stringDropRightWithinLimit"
+                , code = [ "String.dropRight " ++ toString num ++ " " ++ toString string ]
+                , answer = toString (String.dropRight num string)
+                }
+            )
+
+
+stringDropRightOutOfLimit : Generator Exercise
+stringDropRightOutOfLimit =
+    Random.Extra.lettersString 1 3
+        |> Random.andThen
+            (\string ->
+                Random.map2 (,)
+                    (Random.constant string)
+                    (Random.int (String.length string + 1) (String.length string + 3))
+            )
+        |> Random.map
+            (\( string, num ) ->
+                { type_ = "stringDropRightOutOfLimit"
+                , code = [ "String.dropRight " ++ toString num ++ " " ++ toString string ]
+                , answer = toString (String.dropRight num string)
+                }
+            )
+
+
+listTakeWithinLimit : Generator Exercise
+listTakeWithinLimit =
+    Random.Extra.smallList
+        |> Random.andThen
+            (\list ->
+                Random.map2 (,)
+                    (Random.constant list)
+                    (Random.int 0 (List.length list))
+            )
+        |> Random.map
+            (\( list, num ) ->
+                { type_ = "listTakeWithinLimit"
+                , code = [ "List.take " ++ toString num ++ " " ++ toString list ]
+                , answer = toString (List.take num list)
+                }
+            )
+
+
+listTakeOutOfLimit : Generator Exercise
+listTakeOutOfLimit =
+    Random.Extra.smallList
+        |> Random.andThen
+            (\list ->
+                Random.map2 (,)
+                    (Random.constant list)
+                    (Random.int (List.length list + 1) (List.length list + 3))
+            )
+        |> Random.map
+            (\( list, num ) ->
+                { type_ = "listTakeOutOfLimit"
+                , code = [ "List.take " ++ toString num ++ " " ++ toString list ]
+                , answer = toString (List.take num list)
+                }
+            )
+
+
+listDropWithinLimit : Generator Exercise
+listDropWithinLimit =
+    Random.Extra.smallList
+        |> Random.andThen
+            (\list ->
+                Random.map2 (,)
+                    (Random.constant list)
+                    (Random.int 0 (List.length list))
+            )
+        |> Random.map
+            (\( list, num ) ->
+                { type_ = "listDropWithinLimit"
+                , code = [ "List.drop " ++ toString num ++ " " ++ toString list ]
+                , answer = toString (List.drop num list)
+                }
+            )
+
+
+listDropOutOfLimit : Generator Exercise
+listDropOutOfLimit =
+    Random.Extra.smallList
+        |> Random.andThen
+            (\list ->
+                Random.map2 (,)
+                    (Random.constant list)
+                    (Random.int (List.length list + 1) (List.length list + 3))
+            )
+        |> Random.map
+            (\( list, num ) ->
+                { type_ = "listDropOutOfLimit"
+                , code = [ "List.drop " ++ toString num ++ " " ++ toString list ]
+                , answer = toString (List.drop num list)
+                }
+            )
 
 
 function : Generator Exercise

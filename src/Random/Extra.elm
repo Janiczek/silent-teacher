@@ -29,14 +29,9 @@ extraSmallNumber =
     Random.int 0 4
 
 
-lettersString : Generator String
-lettersString =
-    RandomString.rangeLengthString 2 4 RandomChar.lowerCaseLatin
-
-
-possiblyEmptyLettersString : Generator String
-possiblyEmptyLettersString =
-    RandomString.rangeLengthString 0 4 RandomChar.lowerCaseLatin
+lettersString : Int -> Int -> Generator String
+lettersString min max =
+    RandomString.rangeLengthString min max RandomChar.lowerCaseLatin
 
 
 numberString : Generator String
@@ -46,4 +41,4 @@ numberString =
 
 smallList : Generator (List Int)
 smallList =
-    RandomExtra.rangeLengthList 0 4 smallNumber
+    RandomExtra.rangeLengthList 1 3 smallNumber

@@ -69,7 +69,8 @@ init =
       }
     , Random.generate ExercisesGenerated
         ([ Exercise.plus
-         , Exercise.minus
+         , Exercise.minusPositive
+         , Exercise.minusNegative
          , Exercise.times
          , Exercise.letAndPlus
          , Exercise.twoLetAndPlus
@@ -90,12 +91,18 @@ init =
          , Exercise.notNumberEquality
          , Exercise.stringLength
          , Exercise.listLength
-         , Exercise.stringDropLeft
-         , Exercise.stringDropRight
-         , Exercise.stringLeft
-         , Exercise.stringRight
-         , Exercise.listTake
-         , Exercise.listDrop
+         , Exercise.stringDropLeftWithinLimit
+         , Exercise.stringDropLeftOutOfLimit
+         , Exercise.stringDropRightWithinLimit
+         , Exercise.stringDropRightOutOfLimit
+         , Exercise.stringLeftWithinLimit
+         , Exercise.stringLeftOutOfLimit
+         , Exercise.stringRightWithinLimit
+         , Exercise.stringRightOutOfLimit
+         , Exercise.listTakeWithinLimit
+         , Exercise.listTakeOutOfLimit
+         , Exercise.listDropWithinLimit
+         , Exercise.listDropOutOfLimit
          , Exercise.ifEqual
          , Exercise.ifNotEqual
          , Exercise.ifLessThan
@@ -226,14 +233,19 @@ view model =
             , ( "font-size", "24px" )
             ]
         ]
-        [ model.exercises
-            |> List.head
-            |> Maybe.map (viewExercise model.currentExerciseState model.answerInput)
-            |> Maybe.withDefault (H.text "")
-        , model.lastAttempt
-            |> Maybe.map (viewLastAttempt model.lastAttemptState)
-            |> Maybe.withDefault (H.text "")
-        ]
+        {-
+           [ model.exercises
+               |> List.head
+               |> Maybe.map (viewExercise model.currentExerciseState model.answerInput)
+               |> Maybe.withDefault (H.text "")
+           , model.lastAttempt
+               |> Maybe.map (viewLastAttempt model.lastAttemptState)
+               |> Maybe.withDefault (H.text "")
+           ]
+        -}
+        (model.exercises
+            |> List.map (viewExercise model.currentExerciseState model.answerInput)
+        )
 
 
 viewExercise : Animation.State -> String -> Exercise -> Html Msg
@@ -251,6 +263,7 @@ viewExercise currentExerciseState answerInput { code } =
             [ HA.style
                 [ ( "font-family", "Iosevka" )
                 , ( "font-weight", "bold" )
+                , ( "margin", "8px 0 16px" )
                 ]
             ]
             [ H.text (code |> String.join "\n") ]
@@ -266,6 +279,7 @@ viewExercise currentExerciseState answerInput { code } =
                 [ ( "font-family", "Iosevka" )
                 , ( "margin-left", "8px" )
                 , ( "font-size", "24px" )
+                , ( "padding-left", "8px" )
                 ]
             , HA.id "current-answer"
             ]
@@ -289,6 +303,7 @@ viewLastAttempt lastAttemptState { code, answer } =
             [ HA.style
                 [ ( "font-family", "Iosevka" )
                 , ( "font-weight", "bold" )
+                , ( "margin", "8px 0 16px" )
                 ]
             ]
             [ H.text (code |> String.join "\n") ]
@@ -296,8 +311,8 @@ viewLastAttempt lastAttemptState { code, answer } =
             [ HA.style
                 [ ( "font-family", "Iosevka" )
                 , ( "font-weight", "bold" )
-                , ( "background-color", "rgba(255,0,0,0.3)" )
-                , ( "padding", "8px" )
+                , ( "background-color", "#ff6633" )
+                , ( "padding", "4px 8px" )
                 ]
             ]
             [ H.text ("= " ++ answer) ]
