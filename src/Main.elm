@@ -226,7 +226,9 @@ viewExercise answerInput { code } =
                 ]
             ]
             [ H.text (code |> String.join "\n") ]
-        , H.text "="
+        , H.span
+            [ HA.style [ ( "font-family", "Iosevka" ) ] ]
+            [ H.text "=" ]
         , H.input
             [ HE.onInput SetAnswerInput
             , onEnter SubmitAnswer
