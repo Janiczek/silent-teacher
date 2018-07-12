@@ -249,10 +249,34 @@ view model =
         [ model.exercises
             |> List.head
             |> Maybe.map (viewExercise model.currentExerciseState model.answerInput)
-            |> Maybe.withDefault (H.text "")
+            |> Maybe.withDefault viewWin
         , model.lastAttempt
             |> Maybe.map (viewLastAttempt model.lastAttemptState)
             |> Maybe.withDefault (H.text "")
+        ]
+
+
+viewWin : Html Msg
+viewWin =
+    H.div
+        [ HA.style
+            [ ( "padding", "16px 16px 32px" )
+            , ( "box-shadow", "0 0 16px 0 #74bdfe" )
+            , ( "margin", "16px" )
+            , ( "background-color", "rgb(173,255,0)" )
+            , ( "font-family", "Iosevka" )
+            ]
+        ]
+        [ H.h1 [] [ H.text "You won! Congratulations!" ]
+        , H.small []
+            [ H.text "(This app was inspired by "
+            , H.a
+                [ HA.target "_blank"
+                , HA.href "https://silentteacher.toxicode.fr/hourofcode"
+                ]
+                [ H.text "Silent Teacher" ]
+            , H.text ")"
+            ]
         ]
 
 
