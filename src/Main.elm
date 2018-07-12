@@ -1,6 +1,7 @@
 module Main exposing (main)
 
 import Animation exposing (px)
+import Color exposing (Color)
 import Dom
 import Exercise exposing (Exercise)
 import Html as H exposing (Html)
@@ -29,6 +30,7 @@ type alias Model =
     , answerInput : String
     , lastAttempt : Maybe Exercise
     , lastAttemptState : Animation.State
+    , currentExerciseState : Animation.State
     }
 
 
@@ -38,6 +40,17 @@ type Msg
     | SubmitAnswer
     | Focus (Result Dom.Error ())
     | AnimateLastAttempt Animation.Msg
+    | AnimateCurrentExercise Animation.Msg
+
+
+greenBgColor : Color
+greenBgColor =
+    Color.rgb 173 255 0
+
+
+defaultBgColor : Color
+defaultBgColor =
+    Color.rgb 116 190 254
 
 
 init : ( Model, Cmd Msg )
@@ -50,6 +63,9 @@ init =
                 [ Animation.opacity 0
                 , Animation.translate3d (px 0) (px 0) (px 0)
                 ]
+      , currentExerciseState =
+            Animation.style
+                [ Animation.backgroundColor defaultBgColor ]
       }
     , Random.generate ExercisesGenerated
         ([ Exercise.plus
@@ -138,6 +154,12 @@ update msg model =
                     | exercises = model.exercises |> List.drop 1
                     , lastAttempt = Nothing
                     , answerInput = ""
+                    , currentExerciseState =
+                        Animation.interrupt
+                            [ Animation.to [ Animation.backgroundColor greenBgColor ]
+                            , Animation.to [ Animation.backgroundColor defaultBgColor ]
+                            ]
+                            model.currentExerciseState
                 }
               else
                 { model
@@ -171,7 +193,7 @@ update msg model =
                             , Animation.toWith speed [ Animation.translate3d (px 2) (px 0) (px 0) ]
                             , Animation.toWith speed [ Animation.translate3d (px -1) (px 0) (px 0) ]
                             , Animation.toWith speed [ Animation.translate3d (px 0) (px 0) (px 0) ]
-                            , Animation.wait (1000 * Time.millisecond)
+                            , Animation.wait (500 * Time.millisecond)
                             , Animation.toWith halfSpeed [ Animation.opacity 0 ]
                             ]
                             model.lastAttemptState
@@ -189,6 +211,11 @@ update msg model =
             , Cmd.none
             )
 
+        AnimateCurrentExercise animMsg ->
+            ( { model | currentExerciseState = Animation.update animMsg model.currentExerciseState }
+            , Cmd.none
+            )
+
 
 view : Model -> Html Msg
 view model =
@@ -201,7 +228,7 @@ view model =
         ]
         [ model.exercises
             |> List.head
-            |> Maybe.map (viewExercise model.answerInput)
+            |> Maybe.map (viewExercise model.currentExerciseState model.answerInput)
             |> Maybe.withDefault (H.text "")
         , model.lastAttempt
             |> Maybe.map (viewLastAttempt model.lastAttemptState)
@@ -209,16 +236,17 @@ view model =
         ]
 
 
-viewExercise : String -> Exercise -> Html Msg
-viewExercise answerInput { code } =
+viewExercise : Animation.State -> String -> Exercise -> Html Msg
+viewExercise currentExerciseState answerInput { code } =
     H.div
-        [ HA.style
-            [ ( "background-color", "#74bdfe" )
-            , ( "padding", "16px" )
-            , ( "box-shadow", "0 0 16px 0 #74bdfe" )
-            , ( "margin", "16px" )
-            ]
-        ]
+        (Animation.render currentExerciseState
+            ++ [ HA.style
+                    [ ( "padding", "16px" )
+                    , ( "box-shadow", "0 0 16px 0 #74bdfe" )
+                    , ( "margin", "16px" )
+                    ]
+               ]
+        )
         [ H.pre
             [ HA.style
                 [ ( "font-family", "Iosevka" )
@@ -278,7 +306,10 @@ viewLastAttempt lastAttemptState { code, answer } =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Animation.subscription AnimateLastAttempt [ model.lastAttemptState ]
+    Sub.batch
+        [ Animation.subscription AnimateLastAttempt [ model.lastAttemptState ]
+        , Animation.subscription AnimateCurrentExercise [ model.currentExerciseState ]
+        ]
 
 
 {-| When the enter key is released, send the `msg`.
