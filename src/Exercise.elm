@@ -503,12 +503,12 @@ listLength =
 
 stringLeftWithinLimit : Generator Exercise
 stringLeftWithinLimit =
-    Random.Extra.lettersString 3 5
+    Random.Extra.lettersString 4 6
         |> Random.andThen
             (\string ->
                 Random.map2 (,)
                     (Random.constant string)
-                    (Random.int 1 (String.length string - 1))
+                    (Random.int 2 (String.length string - 1))
             )
         |> Random.map
             (\( string, num ) ->
@@ -539,12 +539,12 @@ stringLeftOutOfLimit =
 
 stringRightWithinLimit : Generator Exercise
 stringRightWithinLimit =
-    Random.Extra.lettersString 3 5
+    Random.Extra.lettersString 4 6
         |> Random.andThen
             (\string ->
                 Random.map2 (,)
                     (Random.constant string)
-                    (Random.int 1 (String.length string - 1))
+                    (Random.int 2 (String.length string - 1))
             )
         |> Random.map
             (\( string, num ) ->
