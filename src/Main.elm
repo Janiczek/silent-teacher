@@ -162,9 +162,16 @@ update msg model =
                     , lastAttempt = Nothing
                     , answerInput = ""
                     , currentExerciseState =
+                        let
+                            speed =
+                                Animation.easing
+                                    { duration = 200 * Time.millisecond
+                                    , ease = identity
+                                    }
+                        in
                         Animation.interrupt
-                            [ Animation.to [ Animation.backgroundColor greenBgColor ]
-                            , Animation.to [ Animation.backgroundColor defaultBgColor ]
+                            [ Animation.toWith speed [ Animation.backgroundColor greenBgColor ]
+                            , Animation.toWith speed [ Animation.backgroundColor defaultBgColor ]
                             ]
                             model.currentExerciseState
                 }
@@ -254,7 +261,7 @@ viewExercise currentExerciseState answerInput { code } =
     H.div
         (Animation.render currentExerciseState
             ++ [ HA.style
-                    [ ( "padding", "16px" )
+                    [ ( "padding", "16px 16px 32px" )
                     , ( "box-shadow", "0 0 16px 0 #74bdfe" )
                     , ( "margin", "16px" )
                     ]
@@ -294,7 +301,7 @@ viewLastAttempt lastAttemptState { code, answer } =
         (Animation.render lastAttemptState
             ++ [ HA.style
                     [ ( "background-color", "#98cefe" )
-                    , ( "padding", "16px" )
+                    , ( "padding", "16px 16px 0" )
                     , ( "box-shadow", "0 0 16px 0 #98cefe" )
                     , ( "margin", "16px" )
                     ]
@@ -313,7 +320,7 @@ viewLastAttempt lastAttemptState { code, answer } =
                 [ ( "font-family", "Iosevka" )
                 , ( "font-weight", "bold" )
                 , ( "background-color", "#ff6633" )
-                , ( "padding", "4px 8px" )
+                , ( "padding", "4px 8px 0" )
                 ]
             ]
             [ H.text ("= " ++ answer) ]
