@@ -264,12 +264,28 @@ view model =
         -}
         [ H.node "style" [] [ H.text """
 
+/* Iosevka font */
+
+@font-face {
+    font-family: 'Iosevka';
+    src: url('assets/iosevka-regular.woff2') format('woff2'),
+         url('assets/iosevka-regular.woff') format('woff'),
+         url('assets/iosevka-regular.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Iosevka';
+    font-weight: 700;
+    src: url('assets/iosevka-bold.woff2') format('woff2'),
+         url('assets/iosevka-bold.woff') format('woff'),
+         url('assets/iosevka-bold.ttf') format('truetype');
+}
+
 /* Taken from https://css-tricks.com/css3-progress-bars/ */
 
 .meter {
     height: 20px;  /* Can be anything */
     position: relative;
-    margin: 60px 0 20px 0; /* Just for demo spacing */
+    margin: 16px 16px 20px; /* Just for demo spacing */
     background: #555;
     -moz-border-radius: 25px;
     -webkit-border-radius: 25px;
@@ -443,15 +459,24 @@ viewProgress all currentExercises =
     if current == 0 then
         H.text ""
     else
-        H.div
-            [ HA.class "meter" ]
-            [ H.span
+        H.div []
+            [ H.div
                 [ HA.style
-                    [ ( "width", toString donePercent ++ "%" )
-                    , ( "transition", "width 0.3s" )
+                    [ ( "font-size", "16px" )
+                    , ( "font-family", "Iosevka" )
                     ]
                 ]
-                []
+                [ H.text "Your progress:" ]
+            , H.div
+                [ HA.class "meter" ]
+                [ H.span
+                    [ HA.style
+                        [ ( "width", toString donePercent ++ "%" )
+                        , ( "transition", "width 0.3s" )
+                        ]
+                    ]
+                    []
+                ]
             ]
 
 
