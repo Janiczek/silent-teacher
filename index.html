@@ -17433,7 +17433,7 @@ var _user$project$Main$viewProgress = F2(
 		var current = _elm_lang$core$List$length(currentExercises);
 		var done = all - current;
 		var donePercent = (_elm_lang$core$Basics$toFloat(done) * 100) / _elm_lang$core$Basics$toFloat(all);
-		return A2(
+		return _elm_lang$core$Native_Utils.eq(current, 0) ? _elm_lang$html$Html$text('') : A2(
 			_elm_lang$html$Html$div,
 			{
 				ctor: '::',
