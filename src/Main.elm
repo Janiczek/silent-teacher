@@ -464,6 +464,7 @@ viewProgress all currentExercises =
                 [ HA.style
                     [ ( "font-size", "16px" )
                     , ( "font-family", "Iosevka" )
+                    , ( "margin-left", "16px" )
                     ]
                 ]
                 [ H.text "Your progress:" ]
