@@ -430,7 +430,11 @@ viewProgress all currentExercises =
         H.div
             [ HA.class "meter" ]
             [ H.span
-                [ HA.style [ ( "width", toString donePercent ++ "%" ) ] ]
+                [ HA.style
+                    [ ( "width", toString donePercent ++ "%" )
+                    , ( "transition", "width 0.3s" )
+                    ]
+                ]
                 []
             ]
 
