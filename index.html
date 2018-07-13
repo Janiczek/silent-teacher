@@ -17428,11 +17428,48 @@ var _user$project$Main$viewWin = A2(
 			_1: {ctor: '[]'}
 		}
 	});
+var _user$project$Main$viewProgress = F2(
+	function (all, currentExercises) {
+		var current = _elm_lang$core$List$length(currentExercises);
+		var done = all - current;
+		var donePercent = (_elm_lang$core$Basics$toFloat(done) * 100) / _elm_lang$core$Basics$toFloat(all);
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('meter'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$span,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$style(
+							{
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: 'width',
+									_1: A2(
+										_elm_lang$core$Basics_ops['++'],
+										_elm_lang$core$Basics$toString(donePercent),
+										'%')
+								},
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					},
+					{ctor: '[]'}),
+				_1: {ctor: '[]'}
+			});
+	});
 var _user$project$Main$defaultBgColor = A3(_elm_lang$core$Color$rgb, 116, 190, 254);
 var _user$project$Main$greenBgColor = A3(_elm_lang$core$Color$rgb, 173, 255, 0);
-var _user$project$Main$Model = F5(
-	function (a, b, c, d, e) {
-		return {exercises: a, answerInput: b, lastAttempt: c, lastAttemptState: d, currentExerciseState: e};
+var _user$project$Main$Model = F6(
+	function (a, b, c, d, e, f) {
+		return {exercises: a, allExercises: b, answerInput: c, lastAttempt: d, lastAttemptState: e, currentExerciseState: f};
 	});
 var _user$project$Main$AnimateCurrentExercise = function (a) {
 	return {ctor: 'AnimateCurrentExercise', _0: a};
@@ -17478,11 +17515,15 @@ var _user$project$Main$update = F2(
 		var _p2 = msg;
 		switch (_p2.ctor) {
 			case 'ExercisesGenerated':
+				var _p3 = _p2._0;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{exercises: _p2._0}),
+						{
+							exercises: _p3,
+							allExercises: _elm_lang$core$List$length(_p3)
+						}),
 					_1: _user$project$Main$focusCurrentAnswer
 				};
 			case 'SetAnswerInput':
@@ -17500,9 +17541,9 @@ var _user$project$Main$update = F2(
 					false,
 					A2(
 						_elm_lang$core$Maybe$map,
-						function (_p3) {
-							var _p4 = _p3;
-							return _elm_lang$core$Native_Utils.eq(model.answerInput, _p4.answer);
+						function (_p4) {
+							var _p5 = _p4;
+							return _elm_lang$core$Native_Utils.eq(model.answerInput, _p5.answer);
 						},
 						lastExercise));
 				return {
@@ -17792,8 +17833,8 @@ var _user$project$Main$SetAnswerInput = function (a) {
 	return {ctor: 'SetAnswerInput', _0: a};
 };
 var _user$project$Main$viewExercise = F3(
-	function (currentExerciseState, answerInput, _p5) {
-		var _p6 = _p5;
+	function (currentExerciseState, answerInput, _p6) {
+		var _p7 = _p6;
 		return A2(
 			_elm_lang$html$Html$div,
 			A2(
@@ -17841,7 +17882,7 @@ var _user$project$Main$viewExercise = F3(
 					},
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html$text(_p6.code),
+						_0: _elm_lang$html$Html$text(_p7.code),
 						_1: {ctor: '[]'}
 					}),
 				_1: {
@@ -17918,43 +17959,66 @@ var _user$project$Main$viewExercise = F3(
 var _user$project$Main$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
+		{ctor: '[]'},
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$style(
+			_0: A3(
+				_elm_lang$html$Html$node,
+				'style',
+				{ctor: '[]'},
 				{
 					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'display', _1: 'grid'},
-					_1: {
-						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'grid-template-columns', _1: 'repeat(3,1fr)'},
-						_1: {
-							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'font-size', _1: '24px'},
-							_1: {ctor: '[]'}
-						}
-					}
+					_0: _elm_lang$html$Html$text('\n\n/* Taken from https://css-tricks.com/css3-progress-bars/ */\n\n.meter {\n    height: 20px;  /* Can be anything */\n    position: relative;\n    margin: 60px 0 20px 0; /* Just for demo spacing */\n    background: #555;\n    -moz-border-radius: 25px;\n    -webkit-border-radius: 25px;\n    border-radius: 25px;\n    padding: 10px;\n    -webkit-box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);\n    -moz-box-shadow   : inset 0 -1px 1px rgba(255,255,255,0.3);\n    box-shadow        : inset 0 -1px 1px rgba(255,255,255,0.3);\n}\n.meter > span {\n    display: block;\n    height: 100%;\n       -webkit-border-top-right-radius: 8px;\n    -webkit-border-bottom-right-radius: 8px;\n           -moz-border-radius-topright: 8px;\n        -moz-border-radius-bottomright: 8px;\n               border-top-right-radius: 8px;\n            border-bottom-right-radius: 8px;\n        -webkit-border-top-left-radius: 20px;\n     -webkit-border-bottom-left-radius: 20px;\n            -moz-border-radius-topleft: 20px;\n         -moz-border-radius-bottomleft: 20px;\n                border-top-left-radius: 20px;\n             border-bottom-left-radius: 20px;\n    background-color: rgb(43,194,83);\n    background-image: -webkit-gradient(\n      linear,\n      left bottom,\n      left top,\n      color-stop(0, rgb(43,194,83)),\n      color-stop(1, rgb(84,240,84))\n     );\n    background-image: -moz-linear-gradient(\n      center bottom,\n      rgb(43,194,83) 37%,\n      rgb(84,240,84) 69%\n     );\n    -webkit-box-shadow:\n      inset 0 2px 9px  rgba(255,255,255,0.3),\n      inset 0 -2px 6px rgba(0,0,0,0.4);\n    -moz-box-shadow:\n      inset 0 2px 9px  rgba(255,255,255,0.3),\n      inset 0 -2px 6px rgba(0,0,0,0.4);\n    box-shadow:\n      inset 0 2px 9px  rgba(255,255,255,0.3),\n      inset 0 -2px 6px rgba(0,0,0,0.4);\n    position: relative;\n    overflow: hidden;\n}\n.meter > span:after, .animate > span > span {\n    content: \"\";\n    position: absolute;\n    top: 0; left: 0; bottom: 0; right: 0;\n    background-image:\n       -webkit-gradient(linear, 0 0, 100% 100%,\n          color-stop(.25, rgba(255, 255, 255, .2)),\n          color-stop(.25, transparent), color-stop(.5, transparent),\n          color-stop(.5, rgba(255, 255, 255, .2)),\n          color-stop(.75, rgba(255, 255, 255, .2)),\n          color-stop(.75, transparent), to(transparent)\n       );\n    background-image:\n        -moz-linear-gradient(\n          -45deg,\n          rgba(255, 255, 255, .2) 25%,\n          transparent 25%,\n          transparent 50%,\n          rgba(255, 255, 255, .2) 50%,\n          rgba(255, 255, 255, .2) 75%,\n          transparent 75%,\n          transparent\n       );\n    z-index: 1;\n    -webkit-background-size: 50px 50px;\n    -moz-background-size: 50px 50px;\n    background-size: 50px 50px;\n    -webkit-animation: move 2s linear infinite;\n    -moz-animation: move 2s linear infinite;\n       -webkit-border-top-right-radius: 8px;\n    -webkit-border-bottom-right-radius: 8px;\n           -moz-border-radius-topright: 8px;\n        -moz-border-radius-bottomright: 8px;\n               border-top-right-radius: 8px;\n            border-bottom-right-radius: 8px;\n        -webkit-border-top-left-radius: 20px;\n     -webkit-border-bottom-left-radius: 20px;\n            -moz-border-radius-topleft: 20px;\n         -moz-border-radius-bottomleft: 20px;\n                border-top-left-radius: 20px;\n             border-bottom-left-radius: 20px;\n    overflow: hidden;\n}\n\n.animate > span:after {\n    display: none;\n}\n\n@-webkit-keyframes move {\n    0% {\n       background-position: 0 0;\n    }\n    100% {\n       background-position: 50px 50px;\n    }\n}\n\n@-moz-keyframes move {\n    0% {\n       background-position: 0 0;\n    }\n    100% {\n       background-position: 50px 50px;\n    }\n}\n\n\n.orange > span {\n    background-color: #f1a165;\n    background-image: -moz-linear-gradient(top, #f1a165, #f36d0a);\n    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #f1a165),color-stop(1, #f36d0a));\n    background-image: -webkit-linear-gradient(#f1a165, #f36d0a);\n}\n\n.red > span {\n    background-color: #f0a3a3;\n    background-image: -moz-linear-gradient(top, #f0a3a3, #f42323);\n    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #f0a3a3),color-stop(1, #f42323));\n    background-image: -webkit-linear-gradient(#f0a3a3, #f42323);\n}\n\n.nostripes > span > span, .nostripes > span:after {\n    -webkit-animation: none;\n    -moz-animation: none;\n    background-image: none;\n}\n'),
+					_1: {ctor: '[]'}
 				}),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$core$Maybe$withDefault,
-				_user$project$Main$viewWin,
-				A2(
-					_elm_lang$core$Maybe$map,
-					A2(_user$project$Main$viewExercise, model.currentExerciseState, model.answerInput),
-					_elm_lang$core$List$head(model.exercises))),
 			_1: {
 				ctor: '::',
 				_0: A2(
-					_elm_lang$core$Maybe$withDefault,
-					_elm_lang$html$Html$text(''),
-					A2(
-						_elm_lang$core$Maybe$map,
-						_user$project$Main$viewLastAttempt(model.lastAttemptState),
-						model.lastAttempt)),
-				_1: {ctor: '[]'}
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$style(
+							{
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'display', _1: 'grid'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'grid-template-columns', _1: 'repeat(3,1fr)'},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'font-size', _1: '24px'},
+										_1: {ctor: '[]'}
+									}
+								}
+							}),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$core$Maybe$withDefault,
+							_user$project$Main$viewWin,
+							A2(
+								_elm_lang$core$Maybe$map,
+								A2(_user$project$Main$viewExercise, model.currentExerciseState, model.answerInput),
+								_elm_lang$core$List$head(model.exercises))),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$core$Maybe$withDefault,
+								_elm_lang$html$Html$text(''),
+								A2(
+									_elm_lang$core$Maybe$map,
+									_user$project$Main$viewLastAttempt(model.lastAttemptState),
+									model.lastAttempt)),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(_user$project$Main$viewProgress, model.allExercises, model.exercises),
+					_1: {ctor: '[]'}
+				}
 			}
 		});
 };
@@ -17965,6 +18029,7 @@ var _user$project$Main$init = {
 	ctor: '_Tuple2',
 	_0: {
 		exercises: {ctor: '[]'},
+		allExercises: 0,
 		answerInput: '',
 		lastAttempt: _elm_lang$core$Maybe$Nothing,
 		lastAttemptState: _mdgriffith$elm_style_animation$Animation$style(
