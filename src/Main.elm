@@ -424,12 +424,15 @@ viewProgress all currentExercises =
         donePercent =
             toFloat done * 100 / toFloat all
     in
-    H.div
-        [ HA.class "meter" ]
-        [ H.span
-            [ HA.style [ ( "width", toString donePercent ++ "%" ) ] ]
-            []
-        ]
+    if current == 0 then
+        H.text ""
+    else
+        H.div
+            [ HA.class "meter" ]
+            [ H.span
+                [ HA.style [ ( "width", toString donePercent ++ "%" ) ] ]
+                []
+            ]
 
 
 viewWin : Html Msg
