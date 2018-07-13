@@ -454,14 +454,18 @@ viewWin =
         , H.h2 []
             [ H.text "You now understand the basics of the "
             , H.a
-                [ HA.href "http://elm-lang.org/" ]
+                [ HA.target "_blank"
+                , HA.href "http://elm-lang.org/"
+                ]
                 [ H.text "Elm" ]
             , H.text " programming language!"
             ]
         , H.p []
             [ H.text "You can continue with similar games "
             , H.a
-                [ HA.href "https://code.org/learn" ]
+                [ HA.target "_blank"
+                , HA.href "https://code.org/learn"
+                ]
                 [ H.text "here!" ]
             ]
         , H.small []
