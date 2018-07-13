@@ -6493,6 +6493,141 @@ var _elm_lang$core$Json_Decode$int = _elm_lang$core$Native_Json.decodePrimitive(
 var _elm_lang$core$Json_Decode$bool = _elm_lang$core$Native_Json.decodePrimitive('bool');
 var _elm_lang$core$Json_Decode$string = _elm_lang$core$Native_Json.decodePrimitive('string');
 var _elm_lang$core$Json_Decode$Decoder = {ctor: 'Decoder'};
+//import Maybe, Native.List //
+
+var _elm_lang$core$Native_Regex = function() {
+
+function escape(str)
+{
+	return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+}
+function caseInsensitive(re)
+{
+	return new RegExp(re.source, 'gi');
+}
+function regex(raw)
+{
+	return new RegExp(raw, 'g');
+}
+
+function contains(re, string)
+{
+	return string.match(re) !== null;
+}
+
+function find(n, re, str)
+{
+	n = n.ctor === 'All' ? Infinity : n._0;
+	var out = [];
+	var number = 0;
+	var string = str;
+	var lastIndex = re.lastIndex;
+	var prevLastIndex = -1;
+	var result;
+	while (number++ < n && (result = re.exec(string)))
+	{
+		if (prevLastIndex === re.lastIndex) break;
+		var i = result.length - 1;
+		var subs = new Array(i);
+		while (i > 0)
+		{
+			var submatch = result[i];
+			subs[--i] = submatch === undefined
+				? _elm_lang$core$Maybe$Nothing
+				: _elm_lang$core$Maybe$Just(submatch);
+		}
+		out.push({
+			match: result[0],
+			submatches: _elm_lang$core$Native_List.fromArray(subs),
+			index: result.index,
+			number: number
+		});
+		prevLastIndex = re.lastIndex;
+	}
+	re.lastIndex = lastIndex;
+	return _elm_lang$core$Native_List.fromArray(out);
+}
+
+function replace(n, re, replacer, string)
+{
+	n = n.ctor === 'All' ? Infinity : n._0;
+	var count = 0;
+	function jsReplacer(match)
+	{
+		if (count++ >= n)
+		{
+			return match;
+		}
+		var i = arguments.length - 3;
+		var submatches = new Array(i);
+		while (i > 0)
+		{
+			var submatch = arguments[i];
+			submatches[--i] = submatch === undefined
+				? _elm_lang$core$Maybe$Nothing
+				: _elm_lang$core$Maybe$Just(submatch);
+		}
+		return replacer({
+			match: match,
+			submatches: _elm_lang$core$Native_List.fromArray(submatches),
+			index: arguments[arguments.length - 2],
+			number: count
+		});
+	}
+	return string.replace(re, jsReplacer);
+}
+
+function split(n, re, str)
+{
+	n = n.ctor === 'All' ? Infinity : n._0;
+	if (n === Infinity)
+	{
+		return _elm_lang$core$Native_List.fromArray(str.split(re));
+	}
+	var string = str;
+	var result;
+	var out = [];
+	var start = re.lastIndex;
+	var restoreLastIndex = re.lastIndex;
+	while (n--)
+	{
+		if (!(result = re.exec(string))) break;
+		out.push(string.slice(start, result.index));
+		start = re.lastIndex;
+	}
+	out.push(string.slice(start));
+	re.lastIndex = restoreLastIndex;
+	return _elm_lang$core$Native_List.fromArray(out);
+}
+
+return {
+	regex: regex,
+	caseInsensitive: caseInsensitive,
+	escape: escape,
+
+	contains: F2(contains),
+	find: F3(find),
+	replace: F4(replace),
+	split: F3(split)
+};
+
+}();
+var _elm_lang$core$Regex$split = _elm_lang$core$Native_Regex.split;
+var _elm_lang$core$Regex$replace = _elm_lang$core$Native_Regex.replace;
+var _elm_lang$core$Regex$find = _elm_lang$core$Native_Regex.find;
+var _elm_lang$core$Regex$contains = _elm_lang$core$Native_Regex.contains;
+var _elm_lang$core$Regex$caseInsensitive = _elm_lang$core$Native_Regex.caseInsensitive;
+var _elm_lang$core$Regex$regex = _elm_lang$core$Native_Regex.regex;
+var _elm_lang$core$Regex$escape = _elm_lang$core$Native_Regex.escape;
+var _elm_lang$core$Regex$Match = F4(
+	function (a, b, c, d) {
+		return {match: a, submatches: b, index: c, number: d};
+	});
+var _elm_lang$core$Regex$Regex = {ctor: 'Regex'};
+var _elm_lang$core$Regex$AtMost = function (a) {
+	return {ctor: 'AtMost', _0: a};
+};
+var _elm_lang$core$Regex$All = {ctor: 'All'};
 var _elm_lang$dom$Native_Dom = function() {
 
 var fakeNode = {
@@ -10627,6 +10762,38 @@ var _kress95$random_pcg_extra$Random_Pcg_String$rangeLengthString = F3(
 				return A2(_kress95$random_pcg_extra$Random_Pcg_String$string, len, charGenerator);
 			},
 			A2(_mgold$elm_random_pcg$Random_Pcg$int, minLength, maxLength));
+	});
+var _lukewestby$elm_string_interpolate$String_Interpolate$applyInterpolation = F2(
+	function (replacements, match) {
+		var ordinalString = function (_p0) {
+			return A2(
+				_elm_lang$core$String$dropLeft,
+				1,
+				A2(_elm_lang$core$String$dropRight, 1, _p0));
+		}(match.match);
+		var ordinal = _elm_lang$core$String$toInt(ordinalString);
+		var _p1 = ordinal;
+		if (_p1.ctor === 'Err') {
+			return '';
+		} else {
+			var _p2 = A2(_elm_lang$core$Array$get, _p1._0, replacements);
+			if (_p2.ctor === 'Nothing') {
+				return '';
+			} else {
+				return _p2._0;
+			}
+		}
+	});
+var _lukewestby$elm_string_interpolate$String_Interpolate$interpolationRegex = _elm_lang$core$Regex$regex('\\{\\d+\\}');
+var _lukewestby$elm_string_interpolate$String_Interpolate$interpolate = F2(
+	function (string, args) {
+		var asArray = _elm_lang$core$Array$fromList(args);
+		return A4(
+			_elm_lang$core$Regex$replace,
+			_elm_lang$core$Regex$All,
+			_lukewestby$elm_string_interpolate$String_Interpolate$interpolationRegex,
+			_lukewestby$elm_string_interpolate$String_Interpolate$applyInterpolation(asArray),
+			string);
 	});
 var _mdgriffith$elm_style_animation$Animation_Model$matchPoints = F2(
 	function (points1, points2) {
@@ -15617,50 +15784,26 @@ var _user$project$Exercise$functionIfLessThan = A5(
 		function (num1, num2, num3, num4) {
 			return {
 				type_: 'functionIfLessThan',
-				code: {
-					ctor: '::',
-					_0: 'hello a b =',
-					_1: {
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\nhello a b =\n    if a < b then\n        {0}\n    else\n        {1}\n\nhello {2} {3}\n',
+					{
 						ctor: '::',
-						_0: '    if a < b then',
+						_0: _elm_lang$core$Basics$toString(num1),
 						_1: {
 							ctor: '::',
-							_0: A2(
-								_elm_lang$core$Basics_ops['++'],
-								'        ',
-								_elm_lang$core$Basics$toString(num1)),
+							_0: _elm_lang$core$Basics$toString(num2),
 							_1: {
 								ctor: '::',
-								_0: '    else',
+								_0: _elm_lang$core$Basics$toString(num3),
 								_1: {
 									ctor: '::',
-									_0: A2(
-										_elm_lang$core$Basics_ops['++'],
-										'        ',
-										_elm_lang$core$Basics$toString(num2)),
-									_1: {
-										ctor: '::',
-										_0: '',
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_elm_lang$core$Basics_ops['++'],
-												'hello ',
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													_elm_lang$core$Basics$toString(num3),
-													A2(
-														_elm_lang$core$Basics_ops['++'],
-														' ',
-														_elm_lang$core$Basics$toString(num4)))),
-											_1: {ctor: '[]'}
-										}
-									}
+									_0: _elm_lang$core$Basics$toString(num4),
+									_1: {ctor: '[]'}
 								}
 							}
 						}
-					}
-				},
+					}),
 				answer: _elm_lang$core$Basics$toString(
 					(_elm_lang$core$Native_Utils.cmp(num3, num4) < 0) ? num1 : num2)
 			};
@@ -15693,64 +15836,38 @@ var _user$project$Exercise$twoIfLessThan = A2(
 								function (num1, num2, num3, num4, num5, num6, num7) {
 									return {
 										type_: 'twoIfLessThan',
-										code: {
-											ctor: '::',
-											_0: A2(
-												_elm_lang$core$Basics_ops['++'],
-												'if ',
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													_elm_lang$core$Basics$toString(num1),
-													A2(
-														_elm_lang$core$Basics_ops['++'],
-														' < ',
-														A2(
-															_elm_lang$core$Basics_ops['++'],
-															_elm_lang$core$Basics$toString(num2),
-															' then')))),
-											_1: {
+										code: A2(
+											_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+											'\nif {0} < {1} then\n    {2}\nelse if {3} < {4} then\n    {5}\nelse\n    {6}\n',
+											{
 												ctor: '::',
-												_0: A2(
-													_elm_lang$core$Basics_ops['++'],
-													'    ',
-													_elm_lang$core$Basics$toString(num3)),
+												_0: _elm_lang$core$Basics$toString(num1),
 												_1: {
 													ctor: '::',
-													_0: A2(
-														_elm_lang$core$Basics_ops['++'],
-														'else if ',
-														A2(
-															_elm_lang$core$Basics_ops['++'],
-															_elm_lang$core$Basics$toString(num4),
-															A2(
-																_elm_lang$core$Basics_ops['++'],
-																' < ',
-																A2(
-																	_elm_lang$core$Basics_ops['++'],
-																	_elm_lang$core$Basics$toString(num5),
-																	' then')))),
+													_0: _elm_lang$core$Basics$toString(num2),
 													_1: {
 														ctor: '::',
-														_0: A2(
-															_elm_lang$core$Basics_ops['++'],
-															'    ',
-															_elm_lang$core$Basics$toString(num6)),
+														_0: _elm_lang$core$Basics$toString(num3),
 														_1: {
 															ctor: '::',
-															_0: 'else',
+															_0: _elm_lang$core$Basics$toString(num4),
 															_1: {
 																ctor: '::',
-																_0: A2(
-																	_elm_lang$core$Basics_ops['++'],
-																	'    ',
-																	_elm_lang$core$Basics$toString(num7)),
-																_1: {ctor: '[]'}
+																_0: _elm_lang$core$Basics$toString(num5),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$core$Basics$toString(num6),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$core$Basics$toString(num7),
+																		_1: {ctor: '[]'}
+																	}
+																}
 															}
 														}
 													}
 												}
-											}
-										},
+											}),
 										answer: _elm_lang$core$Basics$toString(
 											(_elm_lang$core$Native_Utils.cmp(num1, num2) < 0) ? num3 : ((_elm_lang$core$Native_Utils.cmp(num4, num5) < 0) ? num6 : num7))
 									};
@@ -15762,44 +15879,18 @@ var _user$project$Exercise$twoFunctionsInc = A3(
 		function (num1, num2) {
 			return {
 				type_: 'twoFunctionsInc',
-				code: {
-					ctor: '::',
-					_0: 'hello a b =',
-					_1: {
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\nhello a b =\n    a + b\n\nhi a b =\n    hello a (b + 1)\n\nhi {0} {1}\n',
+					{
 						ctor: '::',
-						_0: '    a + b',
+						_0: _elm_lang$core$Basics$toString(num1),
 						_1: {
 							ctor: '::',
-							_0: '',
-							_1: {
-								ctor: '::',
-								_0: 'hi a b =',
-								_1: {
-									ctor: '::',
-									_0: '    hello a (b + 1)',
-									_1: {
-										ctor: '::',
-										_0: '',
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_elm_lang$core$Basics_ops['++'],
-												'hi ',
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													_elm_lang$core$Basics$toString(num1),
-													A2(
-														_elm_lang$core$Basics_ops['++'],
-														' ',
-														_elm_lang$core$Basics$toString(num2)))),
-											_1: {ctor: '[]'}
-										}
-									}
-								}
-							}
+							_0: _elm_lang$core$Basics$toString(num2),
+							_1: {ctor: '[]'}
 						}
-					}
-				},
+					}),
 				answer: _elm_lang$core$Basics$toString((num1 + num2) + 1)
 			};
 		}),
@@ -15811,59 +15902,22 @@ var _user$project$Exercise$twoFunctionsLet = A4(
 		function (num1, num2, num3) {
 			return {
 				type_: 'twoFunctionsLet',
-				code: {
-					ctor: '::',
-					_0: 'hello a b =',
-					_1: {
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\nhello a b =\n    a + b\n\nhi a b =\n    a * b\n\nlet\n    a = hi {1} {2}\nin\n    hello a {0}\n',
+					{
 						ctor: '::',
-						_0: '    a + b',
+						_0: _elm_lang$core$Basics$toString(num1),
 						_1: {
 							ctor: '::',
-							_0: '',
+							_0: _elm_lang$core$Basics$toString(num2),
 							_1: {
 								ctor: '::',
-								_0: 'hi a b =',
-								_1: {
-									ctor: '::',
-									_0: '    a * b',
-									_1: {
-										ctor: '::',
-										_0: '',
-										_1: {
-											ctor: '::',
-											_0: 'let',
-											_1: {
-												ctor: '::',
-												_0: A2(
-													_elm_lang$core$Basics_ops['++'],
-													'    a = hi ',
-													A2(
-														_elm_lang$core$Basics_ops['++'],
-														_elm_lang$core$Basics$toString(num2),
-														A2(
-															_elm_lang$core$Basics_ops['++'],
-															' ',
-															_elm_lang$core$Basics$toString(num3)))),
-												_1: {
-													ctor: '::',
-													_0: 'in',
-													_1: {
-														ctor: '::',
-														_0: A2(
-															_elm_lang$core$Basics_ops['++'],
-															'    hello a ',
-															_elm_lang$core$Basics$toString(num1)),
-														_1: {ctor: '[]'}
-													}
-												}
-											}
-										}
-									}
-								}
+								_0: _elm_lang$core$Basics$toString(num3),
+								_1: {ctor: '[]'}
 							}
 						}
-					}
-				},
+					}),
 				answer: _elm_lang$core$Basics$toString(num1 + (num2 * num3))
 			};
 		}),
@@ -15876,53 +15930,22 @@ var _user$project$Exercise$twoFunctions = A4(
 		function (num1, num2, num3) {
 			return {
 				type_: 'twoFunctions',
-				code: {
-					ctor: '::',
-					_0: 'hello a b =',
-					_1: {
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\nhello a b =\n    a + b\n\nhi a b =\n    a * b\n\nhello {0} (hi {1} {2})\n',
+					{
 						ctor: '::',
-						_0: '    a + b',
+						_0: _elm_lang$core$Basics$toString(num1),
 						_1: {
 							ctor: '::',
-							_0: '',
+							_0: _elm_lang$core$Basics$toString(num2),
 							_1: {
 								ctor: '::',
-								_0: 'hi a b =',
-								_1: {
-									ctor: '::',
-									_0: '    a * b',
-									_1: {
-										ctor: '::',
-										_0: '',
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_elm_lang$core$Basics_ops['++'],
-												'hello ',
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													_elm_lang$core$Basics$toString(num1),
-													A2(
-														_elm_lang$core$Basics_ops['++'],
-														' (hi ',
-														A2(
-															_elm_lang$core$Basics_ops['++'],
-															_elm_lang$core$Basics$toString(num2),
-															A2(
-																_elm_lang$core$Basics_ops['++'],
-																' ',
-																A2(
-																	_elm_lang$core$Basics_ops['++'],
-																	_elm_lang$core$Basics$toString(num3),
-																	')')))))),
-											_1: {ctor: '[]'}
-										}
-									}
-								}
+								_0: _elm_lang$core$Basics$toString(num3),
+								_1: {ctor: '[]'}
 							}
 						}
-					}
-				},
+					}),
 				answer: _elm_lang$core$Basics$toString(num1 + (num2 * num3))
 			};
 		}),
@@ -15935,45 +15958,18 @@ var _user$project$Exercise$twoLetAndFunction = A3(
 		function (num1, num2) {
 			return {
 				type_: 'twoLetAndFunction',
-				code: {
-					ctor: '::',
-					_0: 'hello a b =',
-					_1: {
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\nhello a b =\n    a + b\n\nlet\n    a = {0}\n    b = {1}\nin\n    hello a b\n',
+					{
 						ctor: '::',
-						_0: '    a + b',
+						_0: _elm_lang$core$Basics$toString(num1),
 						_1: {
 							ctor: '::',
-							_0: '',
-							_1: {
-								ctor: '::',
-								_0: 'let',
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_elm_lang$core$Basics_ops['++'],
-										'    a = ',
-										_elm_lang$core$Basics$toString(num1)),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_elm_lang$core$Basics_ops['++'],
-											'    b = ',
-											_elm_lang$core$Basics$toString(num2)),
-										_1: {
-											ctor: '::',
-											_0: 'in',
-											_1: {
-												ctor: '::',
-												_0: '    hello a b',
-												_1: {ctor: '[]'}
-											}
-										}
-									}
-								}
-							}
+							_0: _elm_lang$core$Basics$toString(num2),
+							_1: {ctor: '[]'}
 						}
-					}
-				},
+					}),
 				answer: _elm_lang$core$Basics$toString(num1 + num2)
 			};
 		}),
@@ -15985,41 +15981,18 @@ var _user$project$Exercise$letAndFunction = A3(
 		function (num1, num2) {
 			return {
 				type_: 'letAndFunction',
-				code: {
-					ctor: '::',
-					_0: 'hello a b =',
-					_1: {
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\nhello a b =\n    a + b\n\nlet\n    a = {0}\nin\n    hello a {1}\n',
+					{
 						ctor: '::',
-						_0: '    a + b',
+						_0: _elm_lang$core$Basics$toString(num1),
 						_1: {
 							ctor: '::',
-							_0: '',
-							_1: {
-								ctor: '::',
-								_0: 'let',
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_elm_lang$core$Basics_ops['++'],
-										'    a = ',
-										_elm_lang$core$Basics$toString(num1)),
-									_1: {
-										ctor: '::',
-										_0: 'in',
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_elm_lang$core$Basics_ops['++'],
-												'    hello a ',
-												_elm_lang$core$Basics$toString(num2)),
-											_1: {ctor: '[]'}
-										}
-									}
-								}
-							}
+							_0: _elm_lang$core$Basics$toString(num2),
+							_1: {ctor: '[]'}
 						}
-					}
-				},
+					}),
 				answer: _elm_lang$core$Basics$toString(num1 + num2)
 			};
 		}),
@@ -16031,32 +16004,18 @@ var _user$project$Exercise$function = A3(
 		function (num1, num2) {
 			return {
 				type_: 'function',
-				code: {
-					ctor: '::',
-					_0: 'hello a b =',
-					_1: {
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\nhello a b =\n    a + b\n\nhello {0} {1}\n',
+					{
 						ctor: '::',
-						_0: '    a + b',
+						_0: _elm_lang$core$Basics$toString(num1),
 						_1: {
 							ctor: '::',
-							_0: '',
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$core$Basics_ops['++'],
-									'hello ',
-									A2(
-										_elm_lang$core$Basics_ops['++'],
-										_elm_lang$core$Basics$toString(num1),
-										A2(
-											_elm_lang$core$Basics_ops['++'],
-											' ',
-											_elm_lang$core$Basics$toString(num2)))),
-								_1: {ctor: '[]'}
-							}
+							_0: _elm_lang$core$Basics$toString(num2),
+							_1: {ctor: '[]'}
 						}
-					}
-				},
+					}),
 				answer: _elm_lang$core$Basics$toString(num1 + num2)
 			};
 		}),
@@ -16070,20 +16029,18 @@ var _user$project$Exercise$listDropOutOfLimit = A2(
 		var _p2 = _p1._0;
 		return {
 			type_: 'listDropOutOfLimit',
-			code: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$core$Basics_ops['++'],
-					'List.drop ',
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(_p3),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							' ',
-							_elm_lang$core$Basics$toString(_p2)))),
-				_1: {ctor: '[]'}
-			},
+			code: A2(
+				_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+				'\nList.drop {0} {1}\n',
+				{
+					ctor: '::',
+					_0: _elm_lang$core$Basics$toString(_p3),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(_p2),
+						_1: {ctor: '[]'}
+					}
+				}),
 			answer: _elm_lang$core$Basics$toString(
 				A2(_elm_lang$core$List$drop, _p3, _p2))
 		};
@@ -16112,20 +16069,18 @@ var _user$project$Exercise$listDropWithinLimit = A2(
 		var _p6 = _p5._0;
 		return {
 			type_: 'listDropWithinLimit',
-			code: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$core$Basics_ops['++'],
-					'List.drop ',
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(_p7),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							' ',
-							_elm_lang$core$Basics$toString(_p6)))),
-				_1: {ctor: '[]'}
-			},
+			code: A2(
+				_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+				'\nList.drop {0} {1}\n',
+				{
+					ctor: '::',
+					_0: _elm_lang$core$Basics$toString(_p7),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(_p6),
+						_1: {ctor: '[]'}
+					}
+				}),
 			answer: _elm_lang$core$Basics$toString(
 				A2(_elm_lang$core$List$drop, _p7, _p6))
 		};
@@ -16154,20 +16109,18 @@ var _user$project$Exercise$listTakeOutOfLimit = A2(
 		var _p10 = _p9._0;
 		return {
 			type_: 'listTakeOutOfLimit',
-			code: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$core$Basics_ops['++'],
-					'List.take ',
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(_p11),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							' ',
-							_elm_lang$core$Basics$toString(_p10)))),
-				_1: {ctor: '[]'}
-			},
+			code: A2(
+				_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+				'\nList.take {0} {1}\n',
+				{
+					ctor: '::',
+					_0: _elm_lang$core$Basics$toString(_p11),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(_p10),
+						_1: {ctor: '[]'}
+					}
+				}),
 			answer: _elm_lang$core$Basics$toString(
 				A2(_elm_lang$core$List$take, _p11, _p10))
 		};
@@ -16196,20 +16149,18 @@ var _user$project$Exercise$listTakeWithinLimit = A2(
 		var _p14 = _p13._0;
 		return {
 			type_: 'listTakeWithinLimit',
-			code: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$core$Basics_ops['++'],
-					'List.take ',
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(_p15),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							' ',
-							_elm_lang$core$Basics$toString(_p14)))),
-				_1: {ctor: '[]'}
-			},
+			code: A2(
+				_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+				'\nList.take {0} {1}\n',
+				{
+					ctor: '::',
+					_0: _elm_lang$core$Basics$toString(_p15),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(_p14),
+						_1: {ctor: '[]'}
+					}
+				}),
 			answer: _elm_lang$core$Basics$toString(
 				A2(_elm_lang$core$List$take, _p15, _p14))
 		};
@@ -16238,20 +16189,18 @@ var _user$project$Exercise$stringDropRightOutOfLimit = A2(
 		var _p18 = _p17._1;
 		return {
 			type_: 'stringDropRightOutOfLimit',
-			code: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$core$Basics_ops['++'],
-					'String.dropRight ',
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(_p18),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							' ',
-							_elm_lang$core$Basics$toString(_p19)))),
-				_1: {ctor: '[]'}
-			},
+			code: A2(
+				_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+				'\nString.dropRight {0} {1}\n',
+				{
+					ctor: '::',
+					_0: _elm_lang$core$Basics$toString(_p18),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(_p19),
+						_1: {ctor: '[]'}
+					}
+				}),
 			answer: _elm_lang$core$Basics$toString(
 				A2(_elm_lang$core$String$dropRight, _p18, _p19))
 		};
@@ -16280,20 +16229,18 @@ var _user$project$Exercise$stringDropRightWithinLimit = A2(
 		var _p22 = _p21._1;
 		return {
 			type_: 'stringDropRightWithinLimit',
-			code: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$core$Basics_ops['++'],
-					'String.dropRight ',
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(_p22),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							' ',
-							_elm_lang$core$Basics$toString(_p23)))),
-				_1: {ctor: '[]'}
-			},
+			code: A2(
+				_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+				'\nString.dropRight {0} {1}\n',
+				{
+					ctor: '::',
+					_0: _elm_lang$core$Basics$toString(_p22),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(_p23),
+						_1: {ctor: '[]'}
+					}
+				}),
 			answer: _elm_lang$core$Basics$toString(
 				A2(_elm_lang$core$String$dropRight, _p22, _p23))
 		};
@@ -16322,20 +16269,18 @@ var _user$project$Exercise$stringDropLeftOutOfLimit = A2(
 		var _p26 = _p25._1;
 		return {
 			type_: 'stringDropLeftOutOfLimit',
-			code: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$core$Basics_ops['++'],
-					'String.dropLeft ',
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(_p26),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							' ',
-							_elm_lang$core$Basics$toString(_p27)))),
-				_1: {ctor: '[]'}
-			},
+			code: A2(
+				_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+				'\nString.dropLeft {0} {1}\n',
+				{
+					ctor: '::',
+					_0: _elm_lang$core$Basics$toString(_p26),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(_p27),
+						_1: {ctor: '[]'}
+					}
+				}),
 			answer: _elm_lang$core$Basics$toString(
 				A2(_elm_lang$core$String$dropLeft, _p26, _p27))
 		};
@@ -16364,20 +16309,18 @@ var _user$project$Exercise$stringDropLeftWithinLimit = A2(
 		var _p30 = _p29._1;
 		return {
 			type_: 'stringDropLeftWithinLimit',
-			code: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$core$Basics_ops['++'],
-					'String.dropLeft ',
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(_p30),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							' ',
-							_elm_lang$core$Basics$toString(_p31)))),
-				_1: {ctor: '[]'}
-			},
+			code: A2(
+				_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+				'\nString.dropLeft {0} {1}\n',
+				{
+					ctor: '::',
+					_0: _elm_lang$core$Basics$toString(_p30),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(_p31),
+						_1: {ctor: '[]'}
+					}
+				}),
 			answer: _elm_lang$core$Basics$toString(
 				A2(_elm_lang$core$String$dropLeft, _p30, _p31))
 		};
@@ -16406,20 +16349,18 @@ var _user$project$Exercise$stringRightOutOfLimit = A2(
 		var _p34 = _p33._1;
 		return {
 			type_: 'stringRightOutOfLimit',
-			code: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$core$Basics_ops['++'],
-					'String.right ',
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(_p34),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							' ',
-							_elm_lang$core$Basics$toString(_p35)))),
-				_1: {ctor: '[]'}
-			},
+			code: A2(
+				_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+				'\nString.right {0} {1}\n',
+				{
+					ctor: '::',
+					_0: _elm_lang$core$Basics$toString(_p34),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(_p35),
+						_1: {ctor: '[]'}
+					}
+				}),
 			answer: _elm_lang$core$Basics$toString(
 				A2(_elm_lang$core$String$right, _p34, _p35))
 		};
@@ -16448,20 +16389,18 @@ var _user$project$Exercise$stringRightWithinLimit = A2(
 		var _p38 = _p37._1;
 		return {
 			type_: 'stringRightWithinLimit',
-			code: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$core$Basics_ops['++'],
-					'String.right ',
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(_p38),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							' ',
-							_elm_lang$core$Basics$toString(_p39)))),
-				_1: {ctor: '[]'}
-			},
+			code: A2(
+				_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+				'\nString.right {0} {1}\n',
+				{
+					ctor: '::',
+					_0: _elm_lang$core$Basics$toString(_p38),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(_p39),
+						_1: {ctor: '[]'}
+					}
+				}),
 			answer: _elm_lang$core$Basics$toString(
 				A2(_elm_lang$core$String$right, _p38, _p39))
 		};
@@ -16490,20 +16429,18 @@ var _user$project$Exercise$stringLeftOutOfLimit = A2(
 		var _p42 = _p41._1;
 		return {
 			type_: 'stringLeftOutOfLimit',
-			code: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$core$Basics_ops['++'],
-					'String.left ',
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(_p42),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							' ',
-							_elm_lang$core$Basics$toString(_p43)))),
-				_1: {ctor: '[]'}
-			},
+			code: A2(
+				_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+				'\nString.left {0} {1}\n',
+				{
+					ctor: '::',
+					_0: _elm_lang$core$Basics$toString(_p42),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(_p43),
+						_1: {ctor: '[]'}
+					}
+				}),
 			answer: _elm_lang$core$Basics$toString(
 				A2(_elm_lang$core$String$left, _p42, _p43))
 		};
@@ -16532,20 +16469,18 @@ var _user$project$Exercise$stringLeftWithinLimit = A2(
 		var _p46 = _p45._1;
 		return {
 			type_: 'stringLeftWithinLimit',
-			code: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$core$Basics_ops['++'],
-					'String.left ',
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(_p46),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							' ',
-							_elm_lang$core$Basics$toString(_p47)))),
-				_1: {ctor: '[]'}
-			},
+			code: A2(
+				_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+				'\nString.left {0} {1}\n',
+				{
+					ctor: '::',
+					_0: _elm_lang$core$Basics$toString(_p46),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(_p47),
+						_1: {ctor: '[]'}
+					}
+				}),
 			answer: _elm_lang$core$Basics$toString(
 				A2(_elm_lang$core$String$left, _p46, _p47))
 		};
@@ -16571,14 +16506,14 @@ var _user$project$Exercise$listLength = A2(
 	function (list) {
 		return {
 			type_: 'listLength',
-			code: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$core$Basics_ops['++'],
-					'List.length ',
-					_elm_lang$core$Basics$toString(list)),
-				_1: {ctor: '[]'}
-			},
+			code: A2(
+				_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+				'\nList.length {0}\n',
+				{
+					ctor: '::',
+					_0: _elm_lang$core$Basics$toString(list),
+					_1: {ctor: '[]'}
+				}),
 			answer: _elm_lang$core$Basics$toString(
 				_elm_lang$core$List$length(list))
 		};
@@ -16589,14 +16524,14 @@ var _user$project$Exercise$stringLength = A2(
 	function (string) {
 		return {
 			type_: 'stringLength',
-			code: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$core$Basics_ops['++'],
-					'String.length ',
-					_elm_lang$core$Basics$toString(string)),
-				_1: {ctor: '[]'}
-			},
+			code: A2(
+				_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+				'\nString.length {0}\n',
+				{
+					ctor: '::',
+					_0: _elm_lang$core$Basics$toString(string),
+					_1: {ctor: '[]'}
+				}),
 			answer: _elm_lang$core$Basics$toString(
 				_elm_lang$core$String$length(string))
 		};
@@ -16607,14 +16542,14 @@ var _user$project$Exercise$not_ = A2(
 	function (bool) {
 		return {
 			type_: 'bool',
-			code: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$core$Basics_ops['++'],
-					'not ',
-					_elm_lang$core$Basics$toString(bool)),
-				_1: {ctor: '[]'}
-			},
+			code: A2(
+				_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+				'\nnot {0}\n',
+				{
+					ctor: '::',
+					_0: _elm_lang$core$Basics$toString(bool),
+					_1: {ctor: '[]'}
+				}),
 			answer: _elm_lang$core$Basics$toString(!bool)
 		};
 	},
@@ -16625,17 +16560,18 @@ var _user$project$Exercise$stringInequality = A3(
 		function (string1, string2) {
 			return {
 				type_: 'stringInequality',
-				code: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(string1),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							' /= ',
-							_elm_lang$core$Basics$toString(string2))),
-					_1: {ctor: '[]'}
-				},
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\n{0} /= {1}\n',
+					{
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(string1),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$Basics$toString(string2),
+							_1: {ctor: '[]'}
+						}
+					}),
 				answer: _elm_lang$core$Basics$toString(
 					!_elm_lang$core$Native_Utils.eq(string1, string2))
 			};
@@ -16648,17 +16584,18 @@ var _user$project$Exercise$stringEquality = A3(
 		function (string1, string2) {
 			return {
 				type_: 'stringEquality',
-				code: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(string1),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							' == ',
-							_elm_lang$core$Basics$toString(string2))),
-					_1: {ctor: '[]'}
-				},
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\n{0} == {1}\n',
+					{
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(string1),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$Basics$toString(string2),
+							_1: {ctor: '[]'}
+						}
+					}),
 				answer: _elm_lang$core$Basics$toString(
 					_elm_lang$core$Native_Utils.eq(string1, string2))
 			};
@@ -16671,17 +16608,18 @@ var _user$project$Exercise$numberInequality = A3(
 		function (num1, num2) {
 			return {
 				type_: 'numberInequality',
-				code: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(num1),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							' /= ',
-							_elm_lang$core$Basics$toString(num2))),
-					_1: {ctor: '[]'}
-				},
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\n{0} /= {1}\n',
+					{
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(num1),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$Basics$toString(num2),
+							_1: {ctor: '[]'}
+						}
+					}),
 				answer: _elm_lang$core$Basics$toString(
 					!_elm_lang$core$Native_Utils.eq(num1, num2))
 			};
@@ -16694,23 +16632,18 @@ var _user$project$Exercise$notNumberEquality = A3(
 		function (num1, num2) {
 			return {
 				type_: 'notNumberEquality',
-				code: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$core$Basics_ops['++'],
-						'not (',
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							_elm_lang$core$Basics$toString(num1),
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								' == ',
-								A2(
-									_elm_lang$core$Basics_ops['++'],
-									_elm_lang$core$Basics$toString(num2),
-									')')))),
-					_1: {ctor: '[]'}
-				},
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\nnot ({0} == {1})\n',
+					{
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(num1),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$Basics$toString(num2),
+							_1: {ctor: '[]'}
+						}
+					}),
 				answer: _elm_lang$core$Basics$toString(
 					!_elm_lang$core$Native_Utils.eq(num1, num2))
 			};
@@ -16723,17 +16656,18 @@ var _user$project$Exercise$numberGreaterThanOrEqual = A3(
 		function (num1, num2) {
 			return {
 				type_: 'numberGreaterThanOrEqual',
-				code: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(num1),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							' >= ',
-							_elm_lang$core$Basics$toString(num2))),
-					_1: {ctor: '[]'}
-				},
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\n{0} >= {1}\n',
+					{
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(num1),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$Basics$toString(num2),
+							_1: {ctor: '[]'}
+						}
+					}),
 				answer: _elm_lang$core$Basics$toString(
 					_elm_lang$core$Native_Utils.cmp(num1, num2) > -1)
 			};
@@ -16746,17 +16680,18 @@ var _user$project$Exercise$numberLessThanOrEqual = A3(
 		function (num1, num2) {
 			return {
 				type_: 'numberLessThanOrEqual',
-				code: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(num1),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							' <= ',
-							_elm_lang$core$Basics$toString(num2))),
-					_1: {ctor: '[]'}
-				},
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\n{0} <= {1}\n',
+					{
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(num1),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$Basics$toString(num2),
+							_1: {ctor: '[]'}
+						}
+					}),
 				answer: _elm_lang$core$Basics$toString(
 					_elm_lang$core$Native_Utils.cmp(num1, num2) < 1)
 			};
@@ -16769,17 +16704,18 @@ var _user$project$Exercise$numberGreaterThan = A3(
 		function (num1, num2) {
 			return {
 				type_: 'numberGreaterThan',
-				code: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(num1),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							' > ',
-							_elm_lang$core$Basics$toString(num2))),
-					_1: {ctor: '[]'}
-				},
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\n{0} > {1}\n',
+					{
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(num1),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$Basics$toString(num2),
+							_1: {ctor: '[]'}
+						}
+					}),
 				answer: _elm_lang$core$Basics$toString(
 					_elm_lang$core$Native_Utils.cmp(num1, num2) > 0)
 			};
@@ -16792,17 +16728,18 @@ var _user$project$Exercise$numberLessThan = A3(
 		function (num1, num2) {
 			return {
 				type_: 'numberLessThan',
-				code: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(num1),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							' < ',
-							_elm_lang$core$Basics$toString(num2))),
-					_1: {ctor: '[]'}
-				},
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\n{0} < {1}\n',
+					{
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(num1),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$Basics$toString(num2),
+							_1: {ctor: '[]'}
+						}
+					}),
 				answer: _elm_lang$core$Basics$toString(
 					_elm_lang$core$Native_Utils.cmp(num1, num2) < 0)
 			};
@@ -16815,41 +16752,26 @@ var _user$project$Exercise$ifGreaterThanOrEqual = A5(
 		function (num1, num2, num3, num4) {
 			return {
 				type_: 'ifGreaterThanOrEqual',
-				code: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$core$Basics_ops['++'],
-						'if ',
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							_elm_lang$core$Basics$toString(num1),
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								' >= ',
-								A2(
-									_elm_lang$core$Basics_ops['++'],
-									_elm_lang$core$Basics$toString(num2),
-									' then')))),
-					_1: {
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\nif {0} >= {1} then\n    {2}\nelse\n    {3}\n',
+					{
 						ctor: '::',
-						_0: A2(
-							_elm_lang$core$Basics_ops['++'],
-							'    ',
-							_elm_lang$core$Basics$toString(num3)),
+						_0: _elm_lang$core$Basics$toString(num1),
 						_1: {
 							ctor: '::',
-							_0: 'else',
+							_0: _elm_lang$core$Basics$toString(num2),
 							_1: {
 								ctor: '::',
-								_0: A2(
-									_elm_lang$core$Basics_ops['++'],
-									'    ',
-									_elm_lang$core$Basics$toString(num4)),
-								_1: {ctor: '[]'}
+								_0: _elm_lang$core$Basics$toString(num3),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$core$Basics$toString(num4),
+									_1: {ctor: '[]'}
+								}
 							}
 						}
-					}
-				},
+					}),
 				answer: _elm_lang$core$Basics$toString(
 					(_elm_lang$core$Native_Utils.cmp(num1, num2) > -1) ? num3 : num4)
 			};
@@ -16864,41 +16786,26 @@ var _user$project$Exercise$ifLessThanOrEqual = A5(
 		function (num1, num2, num3, num4) {
 			return {
 				type_: 'ifLessThanOrEqual',
-				code: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$core$Basics_ops['++'],
-						'if ',
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							_elm_lang$core$Basics$toString(num1),
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								' <= ',
-								A2(
-									_elm_lang$core$Basics_ops['++'],
-									_elm_lang$core$Basics$toString(num2),
-									' then')))),
-					_1: {
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\nif {0} <= {1} then\n    {2}\nelse\n    {3}\n',
+					{
 						ctor: '::',
-						_0: A2(
-							_elm_lang$core$Basics_ops['++'],
-							'    ',
-							_elm_lang$core$Basics$toString(num3)),
+						_0: _elm_lang$core$Basics$toString(num1),
 						_1: {
 							ctor: '::',
-							_0: 'else',
+							_0: _elm_lang$core$Basics$toString(num2),
 							_1: {
 								ctor: '::',
-								_0: A2(
-									_elm_lang$core$Basics_ops['++'],
-									'    ',
-									_elm_lang$core$Basics$toString(num4)),
-								_1: {ctor: '[]'}
+								_0: _elm_lang$core$Basics$toString(num3),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$core$Basics$toString(num4),
+									_1: {ctor: '[]'}
+								}
 							}
 						}
-					}
-				},
+					}),
 				answer: _elm_lang$core$Basics$toString(
 					(_elm_lang$core$Native_Utils.cmp(num1, num2) < 1) ? num3 : num4)
 			};
@@ -16913,41 +16820,26 @@ var _user$project$Exercise$ifGreaterThan = A5(
 		function (num1, num2, num3, num4) {
 			return {
 				type_: 'ifGreaterThan',
-				code: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$core$Basics_ops['++'],
-						'if ',
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							_elm_lang$core$Basics$toString(num1),
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								' > ',
-								A2(
-									_elm_lang$core$Basics_ops['++'],
-									_elm_lang$core$Basics$toString(num2),
-									' then')))),
-					_1: {
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\nif {0} > {1} then\n    {2}\nelse\n    {3}\n',
+					{
 						ctor: '::',
-						_0: A2(
-							_elm_lang$core$Basics_ops['++'],
-							'    ',
-							_elm_lang$core$Basics$toString(num3)),
+						_0: _elm_lang$core$Basics$toString(num1),
 						_1: {
 							ctor: '::',
-							_0: 'else',
+							_0: _elm_lang$core$Basics$toString(num2),
 							_1: {
 								ctor: '::',
-								_0: A2(
-									_elm_lang$core$Basics_ops['++'],
-									'    ',
-									_elm_lang$core$Basics$toString(num4)),
-								_1: {ctor: '[]'}
+								_0: _elm_lang$core$Basics$toString(num3),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$core$Basics$toString(num4),
+									_1: {ctor: '[]'}
+								}
 							}
 						}
-					}
-				},
+					}),
 				answer: _elm_lang$core$Basics$toString(
 					(_elm_lang$core$Native_Utils.cmp(num1, num2) > 0) ? num3 : num4)
 			};
@@ -16962,41 +16854,26 @@ var _user$project$Exercise$ifLessThan = A5(
 		function (num1, num2, num3, num4) {
 			return {
 				type_: 'ifLessThan',
-				code: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$core$Basics_ops['++'],
-						'if ',
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							_elm_lang$core$Basics$toString(num1),
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								' < ',
-								A2(
-									_elm_lang$core$Basics_ops['++'],
-									_elm_lang$core$Basics$toString(num2),
-									' then')))),
-					_1: {
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\nif {0} < {1} then\n    {2}\nelse\n    {3}\n',
+					{
 						ctor: '::',
-						_0: A2(
-							_elm_lang$core$Basics_ops['++'],
-							'    ',
-							_elm_lang$core$Basics$toString(num3)),
+						_0: _elm_lang$core$Basics$toString(num1),
 						_1: {
 							ctor: '::',
-							_0: 'else',
+							_0: _elm_lang$core$Basics$toString(num2),
 							_1: {
 								ctor: '::',
-								_0: A2(
-									_elm_lang$core$Basics_ops['++'],
-									'    ',
-									_elm_lang$core$Basics$toString(num4)),
-								_1: {ctor: '[]'}
+								_0: _elm_lang$core$Basics$toString(num3),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$core$Basics$toString(num4),
+									_1: {ctor: '[]'}
+								}
 							}
 						}
-					}
-				},
+					}),
 				answer: _elm_lang$core$Basics$toString(
 					(_elm_lang$core$Native_Utils.cmp(num1, num2) < 0) ? num3 : num4)
 			};
@@ -17011,41 +16888,26 @@ var _user$project$Exercise$ifNotEqual = A5(
 		function (num1, num2, num3, num4) {
 			return {
 				type_: 'ifNotEqual',
-				code: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$core$Basics_ops['++'],
-						'if ',
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							_elm_lang$core$Basics$toString(num1),
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								' /= ',
-								A2(
-									_elm_lang$core$Basics_ops['++'],
-									_elm_lang$core$Basics$toString(num2),
-									' then')))),
-					_1: {
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\nif {0} /= {1} then\n    {2}\nelse\n    {3}\n',
+					{
 						ctor: '::',
-						_0: A2(
-							_elm_lang$core$Basics_ops['++'],
-							'    ',
-							_elm_lang$core$Basics$toString(num3)),
+						_0: _elm_lang$core$Basics$toString(num1),
 						_1: {
 							ctor: '::',
-							_0: 'else',
+							_0: _elm_lang$core$Basics$toString(num2),
 							_1: {
 								ctor: '::',
-								_0: A2(
-									_elm_lang$core$Basics_ops['++'],
-									'    ',
-									_elm_lang$core$Basics$toString(num4)),
-								_1: {ctor: '[]'}
+								_0: _elm_lang$core$Basics$toString(num3),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$core$Basics$toString(num4),
+									_1: {ctor: '[]'}
+								}
 							}
 						}
-					}
-				},
+					}),
 				answer: _elm_lang$core$Basics$toString(
 					(!_elm_lang$core$Native_Utils.eq(num1, num2)) ? num3 : num4)
 			};
@@ -17060,41 +16922,26 @@ var _user$project$Exercise$ifEqual = A5(
 		function (num1, num2, num3, num4) {
 			return {
 				type_: 'ifEqual',
-				code: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$core$Basics_ops['++'],
-						'if ',
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							_elm_lang$core$Basics$toString(num1),
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								' == ',
-								A2(
-									_elm_lang$core$Basics_ops['++'],
-									_elm_lang$core$Basics$toString(num2),
-									' then')))),
-					_1: {
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\nif {0} == {1} then\n    {2}\nelse\n    {3}\n',
+					{
 						ctor: '::',
-						_0: A2(
-							_elm_lang$core$Basics_ops['++'],
-							'    ',
-							_elm_lang$core$Basics$toString(num3)),
+						_0: _elm_lang$core$Basics$toString(num1),
 						_1: {
 							ctor: '::',
-							_0: 'else',
+							_0: _elm_lang$core$Basics$toString(num2),
 							_1: {
 								ctor: '::',
-								_0: A2(
-									_elm_lang$core$Basics_ops['++'],
-									'    ',
-									_elm_lang$core$Basics$toString(num4)),
-								_1: {ctor: '[]'}
+								_0: _elm_lang$core$Basics$toString(num3),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$core$Basics$toString(num4),
+									_1: {ctor: '[]'}
+								}
 							}
 						}
-					}
-				},
+					}),
 				answer: _elm_lang$core$Basics$toString(
 					_elm_lang$core$Native_Utils.eq(num1, num2) ? num3 : num4)
 			};
@@ -17109,17 +16956,18 @@ var _user$project$Exercise$numberEquality = A3(
 		function (num1, num2) {
 			return {
 				type_: 'numberEquality',
-				code: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(num1),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							' == ',
-							_elm_lang$core$Basics$toString(num2))),
-					_1: {ctor: '[]'}
-				},
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\n{0} == {1}\n',
+					{
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(num1),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$Basics$toString(num2),
+							_1: {ctor: '[]'}
+						}
+					}),
 				answer: _elm_lang$core$Basics$toString(
 					_elm_lang$core$Native_Utils.eq(num1, num2))
 			};
@@ -17131,17 +16979,14 @@ var _user$project$Exercise$sameNumberEquality = A2(
 	function (num) {
 		return {
 			type_: 'sameNumberEquality',
-			code: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$core$Basics_ops['++'],
-					_elm_lang$core$Basics$toString(num),
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						' == ',
-						_elm_lang$core$Basics$toString(num))),
-				_1: {ctor: '[]'}
-			},
+			code: A2(
+				_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+				'\n{0} == {0}\n',
+				{
+					ctor: '::',
+					_0: _elm_lang$core$Basics$toString(num),
+					_1: {ctor: '[]'}
+				}),
 			answer: _elm_lang$core$Basics$toString(true)
 		};
 	},
@@ -17151,14 +16996,14 @@ var _user$project$Exercise$numberToString = A2(
 	function (num) {
 		return {
 			type_: 'numberToString',
-			code: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$core$Basics_ops['++'],
-					'toString ',
-					_elm_lang$core$Basics$toString(num)),
-				_1: {ctor: '[]'}
-			},
+			code: A2(
+				_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+				'\ntoString {0}\n',
+				{
+					ctor: '::',
+					_0: _elm_lang$core$Basics$toString(num),
+					_1: {ctor: '[]'}
+				}),
 			answer: _elm_lang$core$Basics$toString(
 				_elm_lang$core$Basics$toString(num))
 		};
@@ -17170,33 +17015,18 @@ var _user$project$Exercise$concatLists = A3(
 		function (list1, list2) {
 			return {
 				type_: 'concatLists',
-				code: {
-					ctor: '::',
-					_0: 'let',
-					_1: {
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\nlet\n    a = {0}\n    b = {1}\nin\n    a ++ b\n',
+					{
 						ctor: '::',
-						_0: A2(
-							_elm_lang$core$Basics_ops['++'],
-							'    a = ',
-							_elm_lang$core$Basics$toString(list1)),
+						_0: _elm_lang$core$Basics$toString(list1),
 						_1: {
 							ctor: '::',
-							_0: A2(
-								_elm_lang$core$Basics_ops['++'],
-								'    b = ',
-								_elm_lang$core$Basics$toString(list2)),
-							_1: {
-								ctor: '::',
-								_0: 'in',
-								_1: {
-									ctor: '::',
-									_0: '    a ++ b',
-									_1: {ctor: '[]'}
-								}
-							}
+							_0: _elm_lang$core$Basics$toString(list2),
+							_1: {ctor: '[]'}
 						}
-					}
-				},
+					}),
 				answer: _elm_lang$core$Basics$toString(
 					A2(_elm_lang$core$Basics_ops['++'], list1, list2))
 			};
@@ -17209,33 +17039,18 @@ var _user$project$Exercise$concatNumberStrings = A3(
 		function (string1, string2) {
 			return {
 				type_: 'concatNumberStrings',
-				code: {
-					ctor: '::',
-					_0: 'let',
-					_1: {
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\nlet\n    a = {0}\n    b = {1}\nin\n    a ++ b\n',
+					{
 						ctor: '::',
-						_0: A2(
-							_elm_lang$core$Basics_ops['++'],
-							'    a = ',
-							_elm_lang$core$Basics$toString(string1)),
+						_0: _elm_lang$core$Basics$toString(string1),
 						_1: {
 							ctor: '::',
-							_0: A2(
-								_elm_lang$core$Basics_ops['++'],
-								'    b = ',
-								_elm_lang$core$Basics$toString(string2)),
-							_1: {
-								ctor: '::',
-								_0: 'in',
-								_1: {
-									ctor: '::',
-									_0: '    a ++ b',
-									_1: {ctor: '[]'}
-								}
-							}
+							_0: _elm_lang$core$Basics$toString(string2),
+							_1: {ctor: '[]'}
 						}
-					}
-				},
+					}),
 				answer: _elm_lang$core$Basics$toString(
 					A2(_elm_lang$core$Basics_ops['++'], string1, string2))
 			};
@@ -17248,33 +17063,18 @@ var _user$project$Exercise$concatStrings = A3(
 		function (string1, string2) {
 			return {
 				type_: 'concatStrings',
-				code: {
-					ctor: '::',
-					_0: 'let',
-					_1: {
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\nlet\n    a = {0}\n    b = {1}\nin\n    a ++ b\n',
+					{
 						ctor: '::',
-						_0: A2(
-							_elm_lang$core$Basics_ops['++'],
-							'    a = ',
-							_elm_lang$core$Basics$toString(string1)),
+						_0: _elm_lang$core$Basics$toString(string1),
 						_1: {
 							ctor: '::',
-							_0: A2(
-								_elm_lang$core$Basics_ops['++'],
-								'    b = ',
-								_elm_lang$core$Basics$toString(string2)),
-							_1: {
-								ctor: '::',
-								_0: 'in',
-								_1: {
-									ctor: '::',
-									_0: '    a ++ b',
-									_1: {ctor: '[]'}
-								}
-							}
+							_0: _elm_lang$core$Basics$toString(string2),
+							_1: {ctor: '[]'}
 						}
-					}
-				},
+					}),
 				answer: _elm_lang$core$Basics$toString(
 					A2(_elm_lang$core$Basics_ops['++'], string1, string2))
 			};
@@ -17287,33 +17087,18 @@ var _user$project$Exercise$twoLetAndPlus = A3(
 		function (num1, num2) {
 			return {
 				type_: 'twoLetAndPlus',
-				code: {
-					ctor: '::',
-					_0: 'let',
-					_1: {
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\nlet\n    a = {0}\n    b = {1}\nin\n    a + b\n',
+					{
 						ctor: '::',
-						_0: A2(
-							_elm_lang$core$Basics_ops['++'],
-							'    a = ',
-							_elm_lang$core$Basics$toString(num1)),
+						_0: _elm_lang$core$Basics$toString(num1),
 						_1: {
 							ctor: '::',
-							_0: A2(
-								_elm_lang$core$Basics_ops['++'],
-								'    b = ',
-								_elm_lang$core$Basics$toString(num2)),
-							_1: {
-								ctor: '::',
-								_0: 'in',
-								_1: {
-									ctor: '::',
-									_0: '    a + b',
-									_1: {ctor: '[]'}
-								}
-							}
+							_0: _elm_lang$core$Basics$toString(num2),
+							_1: {ctor: '[]'}
 						}
-					}
-				},
+					}),
 				answer: _elm_lang$core$Basics$toString(num1 + num2)
 			};
 		}),
@@ -17325,29 +17110,18 @@ var _user$project$Exercise$letAndPlus = A3(
 		function (num1, num2) {
 			return {
 				type_: 'letAndPlus',
-				code: {
-					ctor: '::',
-					_0: 'let',
-					_1: {
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\nlet\n    a = {0}\nin\n    a + {1}\n',
+					{
 						ctor: '::',
-						_0: A2(
-							_elm_lang$core$Basics_ops['++'],
-							'    a = ',
-							_elm_lang$core$Basics$toString(num1)),
+						_0: _elm_lang$core$Basics$toString(num1),
 						_1: {
 							ctor: '::',
-							_0: 'in',
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$core$Basics_ops['++'],
-									'    a + ',
-									_elm_lang$core$Basics$toString(num2)),
-								_1: {ctor: '[]'}
-							}
+							_0: _elm_lang$core$Basics$toString(num2),
+							_1: {ctor: '[]'}
 						}
-					}
-				},
+					}),
 				answer: _elm_lang$core$Basics$toString(num1 + num2)
 			};
 		}),
@@ -17359,17 +17133,18 @@ var _user$project$Exercise$times = A3(
 		function (num1, num2) {
 			return {
 				type_: 'times',
-				code: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(num1),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							' * ',
-							_elm_lang$core$Basics$toString(num2))),
-					_1: {ctor: '[]'}
-				},
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\n{0} * {1}\n',
+					{
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(num1),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$Basics$toString(num2),
+							_1: {ctor: '[]'}
+						}
+					}),
 				answer: _elm_lang$core$Basics$toString(num1 * num2)
 			};
 		}),
@@ -17383,17 +17158,18 @@ var _user$project$Exercise$minusNegative = A2(
 		var _p50 = _p49._0;
 		return {
 			type_: 'minusNegative',
-			code: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$core$Basics_ops['++'],
-					_elm_lang$core$Basics$toString(_p50),
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						' - ',
-						_elm_lang$core$Basics$toString(_p51))),
-				_1: {ctor: '[]'}
-			},
+			code: A2(
+				_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+				'\n{0} - {1}\n',
+				{
+					ctor: '::',
+					_0: _elm_lang$core$Basics$toString(_p50),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(_p51),
+						_1: {ctor: '[]'}
+					}
+				}),
 			answer: _elm_lang$core$Basics$toString(_p50 - _p51)
 		};
 	},
@@ -17418,17 +17194,18 @@ var _user$project$Exercise$minusPositive = A2(
 		var _p54 = _p53._0;
 		return {
 			type_: 'minusPositive',
-			code: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$core$Basics_ops['++'],
-					_elm_lang$core$Basics$toString(_p54),
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						' - ',
-						_elm_lang$core$Basics$toString(_p55))),
-				_1: {ctor: '[]'}
-			},
+			code: A2(
+				_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+				'\n{0} - {1}\n',
+				{
+					ctor: '::',
+					_0: _elm_lang$core$Basics$toString(_p54),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(_p55),
+						_1: {ctor: '[]'}
+					}
+				}),
 			answer: _elm_lang$core$Basics$toString(_p54 - _p55)
 		};
 	},
@@ -17451,17 +17228,18 @@ var _user$project$Exercise$plus = A3(
 		function (num1, num2) {
 			return {
 				type_: 'plus',
-				code: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(num1),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							' + ',
-							_elm_lang$core$Basics$toString(num2))),
-					_1: {ctor: '[]'}
-				},
+				code: A2(
+					_lukewestby$elm_string_interpolate$String_Interpolate$interpolate,
+					'\n{0} + {1}\n',
+					{
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(num1),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$Basics$toString(num2),
+							_1: {ctor: '[]'}
+						}
+					}),
 				answer: _elm_lang$core$Basics$toString(num1 + num2)
 			};
 		}),
@@ -17537,8 +17315,7 @@ var _user$project$Main$viewLastAttempt = F2(
 					},
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html$text(
-							A2(_elm_lang$core$String$join, '\n', _p1.code)),
+						_0: _elm_lang$html$Html$text(_p1.code),
 						_1: {ctor: '[]'}
 					}),
 				_1: {
@@ -18064,8 +17841,7 @@ var _user$project$Main$viewExercise = F3(
 					},
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html$text(
-							A2(_elm_lang$core$String$join, '\n', _p6.code)),
+						_0: _elm_lang$html$Html$text(_p6.code),
 						_1: {ctor: '[]'}
 					}),
 				_1: {

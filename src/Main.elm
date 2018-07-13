@@ -298,7 +298,7 @@ viewExercise currentExerciseState answerInput { code } =
                 , ( "margin", "8px 0 16px" )
                 ]
             ]
-            [ H.text (code |> String.join "\n") ]
+            [ H.text code ]
         , H.span
             [ HA.style [ ( "font-family", "Iosevka" ) ] ]
             [ H.text "=" ]
@@ -338,7 +338,7 @@ viewLastAttempt lastAttemptState { code, answer } =
                 , ( "margin", "8px 0 16px" )
                 ]
             ]
-            [ H.text (code |> String.join "\n") ]
+            [ H.text code ]
         , H.pre
             [ HA.style
                 [ ( "font-family", "Iosevka" )

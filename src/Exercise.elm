@@ -3,11 +3,12 @@ module Exercise exposing (..)
 import Random.Extra
 import Random.Pcg as Random exposing (Generator)
 import Random.Pcg.Extra as RandomExtra
+import String.Interpolate exposing (interpolate)
 
 
 type alias Exercise =
     { type_ : String
-    , code : List String
+    , code : String
     , answer : String
     }
 
@@ -17,7 +18,13 @@ plus =
     Random.map2
         (\num1 num2 ->
             { type_ = "plus"
-            , code = [ toString num1 ++ " + " ++ toString num2 ]
+            , code =
+                interpolate """
+{0} + {1}
+"""
+                    [ toString num1
+                    , toString num2
+                    ]
             , answer = toString (num1 + num2)
             }
         )
@@ -37,7 +44,13 @@ minusPositive =
         |> Random.map
             (\( num1, num2 ) ->
                 { type_ = "minusPositive"
-                , code = [ toString num1 ++ " - " ++ toString num2 ]
+                , code =
+                    interpolate """
+{0} - {1}
+"""
+                        [ toString num1
+                        , toString num2
+                        ]
                 , answer = toString (num1 - num2)
                 }
             )
@@ -55,7 +68,13 @@ minusNegative =
         |> Random.map
             (\( num1, num2 ) ->
                 { type_ = "minusNegative"
-                , code = [ toString num1 ++ " - " ++ toString num2 ]
+                , code =
+                    interpolate """
+{0} - {1}
+"""
+                        [ toString num1
+                        , toString num2
+                        ]
                 , answer = toString (num1 - num2)
                 }
             )
@@ -66,7 +85,13 @@ times =
     Random.map2
         (\num1 num2 ->
             { type_ = "times"
-            , code = [ toString num1 ++ " * " ++ toString num2 ]
+            , code =
+                interpolate """
+{0} * {1}
+"""
+                    [ toString num1
+                    , toString num2
+                    ]
             , answer = toString (num1 * num2)
             }
         )
@@ -80,11 +105,15 @@ letAndPlus =
         (\num1 num2 ->
             { type_ = "letAndPlus"
             , code =
-                [ "let"
-                , "    a = " ++ toString num1
-                , "in"
-                , "    a + " ++ toString num2
-                ]
+                interpolate """
+let
+    a = {0}
+in
+    a + {1}
+"""
+                    [ toString num1
+                    , toString num2
+                    ]
             , answer = toString (num1 + num2)
             }
         )
@@ -98,12 +127,16 @@ twoLetAndPlus =
         (\num1 num2 ->
             { type_ = "twoLetAndPlus"
             , code =
-                [ "let"
-                , "    a = " ++ toString num1
-                , "    b = " ++ toString num2
-                , "in"
-                , "    a + b"
-                ]
+                interpolate """
+let
+    a = {0}
+    b = {1}
+in
+    a + b
+"""
+                    [ toString num1
+                    , toString num2
+                    ]
             , answer = toString (num1 + num2)
             }
         )
@@ -117,12 +150,16 @@ concatStrings =
         (\string1 string2 ->
             { type_ = "concatStrings"
             , code =
-                [ "let"
-                , "    a = " ++ toString string1
-                , "    b = " ++ toString string2
-                , "in"
-                , "    a ++ b"
-                ]
+                interpolate """
+let
+    a = {0}
+    b = {1}
+in
+    a ++ b
+"""
+                    [ toString string1
+                    , toString string2
+                    ]
             , answer = toString (string1 ++ string2)
             }
         )
@@ -136,12 +173,16 @@ concatNumberStrings =
         (\string1 string2 ->
             { type_ = "concatNumberStrings"
             , code =
-                [ "let"
-                , "    a = " ++ toString string1
-                , "    b = " ++ toString string2
-                , "in"
-                , "    a ++ b"
-                ]
+                interpolate """
+let
+    a = {0}
+    b = {1}
+in
+    a ++ b
+"""
+                    [ toString string1
+                    , toString string2
+                    ]
             , answer = toString (string1 ++ string2)
             }
         )
@@ -155,12 +196,16 @@ concatLists =
         (\list1 list2 ->
             { type_ = "concatLists"
             , code =
-                [ "let"
-                , "    a = " ++ toString list1
-                , "    b = " ++ toString list2
-                , "in"
-                , "    a ++ b"
-                ]
+                interpolate """
+let
+    a = {0}
+    b = {1}
+in
+    a ++ b
+"""
+                    [ toString list1
+                    , toString list2
+                    ]
             , answer = toString (list1 ++ list2)
             }
         )
@@ -173,7 +218,11 @@ numberToString =
     Random.map
         (\num ->
             { type_ = "numberToString"
-            , code = [ "toString " ++ toString num ]
+            , code =
+                interpolate """
+toString {0}
+"""
+                    [ toString num ]
             , answer = toString (toString num)
             }
         )
@@ -185,7 +234,11 @@ sameNumberEquality =
     Random.map
         (\num ->
             { type_ = "sameNumberEquality"
-            , code = [ toString num ++ " == " ++ toString num ]
+            , code =
+                interpolate """
+{0} == {0}
+"""
+                    [ toString num ]
             , answer = toString True
             }
         )
@@ -197,7 +250,13 @@ numberEquality =
     Random.map2
         (\num1 num2 ->
             { type_ = "numberEquality"
-            , code = [ toString num1 ++ " == " ++ toString num2 ]
+            , code =
+                interpolate """
+{0} == {1}
+"""
+                    [ toString num1
+                    , toString num2
+                    ]
             , answer = toString (num1 == num2)
             }
         )
@@ -211,11 +270,17 @@ ifEqual =
         (\num1 num2 num3 num4 ->
             { type_ = "ifEqual"
             , code =
-                [ "if " ++ toString num1 ++ " == " ++ toString num2 ++ " then"
-                , "    " ++ toString num3
-                , "else"
-                , "    " ++ toString num4
-                ]
+                interpolate """
+if {0} == {1} then
+    {2}
+else
+    {3}
+"""
+                    [ toString num1
+                    , toString num2
+                    , toString num3
+                    , toString num4
+                    ]
             , answer =
                 toString
                     (if num1 == num2 then
@@ -237,11 +302,17 @@ ifNotEqual =
         (\num1 num2 num3 num4 ->
             { type_ = "ifNotEqual"
             , code =
-                [ "if " ++ toString num1 ++ " /= " ++ toString num2 ++ " then"
-                , "    " ++ toString num3
-                , "else"
-                , "    " ++ toString num4
-                ]
+                interpolate """
+if {0} /= {1} then
+    {2}
+else
+    {3}
+"""
+                    [ toString num1
+                    , toString num2
+                    , toString num3
+                    , toString num4
+                    ]
             , answer =
                 toString
                     (if num1 /= num2 then
@@ -263,11 +334,17 @@ ifLessThan =
         (\num1 num2 num3 num4 ->
             { type_ = "ifLessThan"
             , code =
-                [ "if " ++ toString num1 ++ " < " ++ toString num2 ++ " then"
-                , "    " ++ toString num3
-                , "else"
-                , "    " ++ toString num4
-                ]
+                interpolate """
+if {0} < {1} then
+    {2}
+else
+    {3}
+"""
+                    [ toString num1
+                    , toString num2
+                    , toString num3
+                    , toString num4
+                    ]
             , answer =
                 toString
                     (if num1 < num2 then
@@ -289,11 +366,17 @@ ifGreaterThan =
         (\num1 num2 num3 num4 ->
             { type_ = "ifGreaterThan"
             , code =
-                [ "if " ++ toString num1 ++ " > " ++ toString num2 ++ " then"
-                , "    " ++ toString num3
-                , "else"
-                , "    " ++ toString num4
-                ]
+                interpolate """
+if {0} > {1} then
+    {2}
+else
+    {3}
+"""
+                    [ toString num1
+                    , toString num2
+                    , toString num3
+                    , toString num4
+                    ]
             , answer =
                 toString
                     (if num1 > num2 then
@@ -315,11 +398,17 @@ ifLessThanOrEqual =
         (\num1 num2 num3 num4 ->
             { type_ = "ifLessThanOrEqual"
             , code =
-                [ "if " ++ toString num1 ++ " <= " ++ toString num2 ++ " then"
-                , "    " ++ toString num3
-                , "else"
-                , "    " ++ toString num4
-                ]
+                interpolate """
+if {0} <= {1} then
+    {2}
+else
+    {3}
+"""
+                    [ toString num1
+                    , toString num2
+                    , toString num3
+                    , toString num4
+                    ]
             , answer =
                 toString
                     (if num1 <= num2 then
@@ -341,11 +430,17 @@ ifGreaterThanOrEqual =
         (\num1 num2 num3 num4 ->
             { type_ = "ifGreaterThanOrEqual"
             , code =
-                [ "if " ++ toString num1 ++ " >= " ++ toString num2 ++ " then"
-                , "    " ++ toString num3
-                , "else"
-                , "    " ++ toString num4
-                ]
+                interpolate """
+if {0} >= {1} then
+    {2}
+else
+    {3}
+"""
+                    [ toString num1
+                    , toString num2
+                    , toString num3
+                    , toString num4
+                    ]
             , answer =
                 toString
                     (if num1 >= num2 then
@@ -366,7 +461,13 @@ numberLessThan =
     Random.map2
         (\num1 num2 ->
             { type_ = "numberLessThan"
-            , code = [ toString num1 ++ " < " ++ toString num2 ]
+            , code =
+                interpolate """
+{0} < {1}
+"""
+                    [ toString num1
+                    , toString num2
+                    ]
             , answer = toString (num1 < num2)
             }
         )
@@ -379,7 +480,13 @@ numberGreaterThan =
     Random.map2
         (\num1 num2 ->
             { type_ = "numberGreaterThan"
-            , code = [ toString num1 ++ " > " ++ toString num2 ]
+            , code =
+                interpolate """
+{0} > {1}
+"""
+                    [ toString num1
+                    , toString num2
+                    ]
             , answer = toString (num1 > num2)
             }
         )
@@ -392,7 +499,13 @@ numberLessThanOrEqual =
     Random.map2
         (\num1 num2 ->
             { type_ = "numberLessThanOrEqual"
-            , code = [ toString num1 ++ " <= " ++ toString num2 ]
+            , code =
+                interpolate """
+{0} <= {1}
+"""
+                    [ toString num1
+                    , toString num2
+                    ]
             , answer = toString (num1 <= num2)
             }
         )
@@ -405,7 +518,13 @@ numberGreaterThanOrEqual =
     Random.map2
         (\num1 num2 ->
             { type_ = "numberGreaterThanOrEqual"
-            , code = [ toString num1 ++ " >= " ++ toString num2 ]
+            , code =
+                interpolate """
+{0} >= {1}
+"""
+                    [ toString num1
+                    , toString num2
+                    ]
             , answer = toString (num1 >= num2)
             }
         )
@@ -418,7 +537,13 @@ notNumberEquality =
     Random.map2
         (\num1 num2 ->
             { type_ = "notNumberEquality"
-            , code = [ "not (" ++ toString num1 ++ " == " ++ toString num2 ++ ")" ]
+            , code =
+                interpolate """
+not ({0} == {1})
+"""
+                    [ toString num1
+                    , toString num2
+                    ]
             , answer = toString (not (num1 == num2))
             }
         )
@@ -431,7 +556,13 @@ numberInequality =
     Random.map2
         (\num1 num2 ->
             { type_ = "numberInequality"
-            , code = [ toString num1 ++ " /= " ++ toString num2 ]
+            , code =
+                interpolate """
+{0} /= {1}
+"""
+                    [ toString num1
+                    , toString num2
+                    ]
             , answer = toString (num1 /= num2)
             }
         )
@@ -444,7 +575,13 @@ stringEquality =
     Random.map2
         (\string1 string2 ->
             { type_ = "stringEquality"
-            , code = [ toString string1 ++ " == " ++ toString string2 ]
+            , code =
+                interpolate """
+{0} == {1}
+"""
+                    [ toString string1
+                    , toString string2
+                    ]
             , answer = toString (string1 == string2)
             }
         )
@@ -457,7 +594,13 @@ stringInequality =
     Random.map2
         (\string1 string2 ->
             { type_ = "stringInequality"
-            , code = [ toString string1 ++ " /= " ++ toString string2 ]
+            , code =
+                interpolate """
+{0} /= {1}
+"""
+                    [ toString string1
+                    , toString string2
+                    ]
             , answer = toString (string1 /= string2)
             }
         )
@@ -470,7 +613,11 @@ not_ =
     Random.map
         (\bool ->
             { type_ = "bool"
-            , code = [ "not " ++ toString bool ]
+            , code =
+                interpolate """
+not {0}
+"""
+                    [ toString bool ]
             , answer = toString (not bool)
             }
         )
@@ -482,7 +629,11 @@ stringLength =
     Random.map
         (\string ->
             { type_ = "stringLength"
-            , code = [ "String.length " ++ toString string ]
+            , code =
+                interpolate """
+String.length {0}
+"""
+                    [ toString string ]
             , answer = toString (String.length string)
             }
         )
@@ -494,7 +645,11 @@ listLength =
     Random.map
         (\list ->
             { type_ = "listLength"
-            , code = [ "List.length " ++ toString list ]
+            , code =
+                interpolate """
+List.length {0}
+"""
+                    [ toString list ]
             , answer = toString (List.length list)
             }
         )
@@ -513,7 +668,13 @@ stringLeftWithinLimit =
         |> Random.map
             (\( string, num ) ->
                 { type_ = "stringLeftWithinLimit"
-                , code = [ "String.left " ++ toString num ++ " " ++ toString string ]
+                , code =
+                    interpolate """
+String.left {0} {1}
+"""
+                        [ toString num
+                        , toString string
+                        ]
                 , answer = toString (String.left num string)
                 }
             )
@@ -531,7 +692,13 @@ stringLeftOutOfLimit =
         |> Random.map
             (\( string, num ) ->
                 { type_ = "stringLeftOutOfLimit"
-                , code = [ "String.left " ++ toString num ++ " " ++ toString string ]
+                , code =
+                    interpolate """
+String.left {0} {1}
+"""
+                        [ toString num
+                        , toString string
+                        ]
                 , answer = toString (String.left num string)
                 }
             )
@@ -549,7 +716,13 @@ stringRightWithinLimit =
         |> Random.map
             (\( string, num ) ->
                 { type_ = "stringRightWithinLimit"
-                , code = [ "String.right " ++ toString num ++ " " ++ toString string ]
+                , code =
+                    interpolate """
+String.right {0} {1}
+"""
+                        [ toString num
+                        , toString string
+                        ]
                 , answer = toString (String.right num string)
                 }
             )
@@ -567,7 +740,13 @@ stringRightOutOfLimit =
         |> Random.map
             (\( string, num ) ->
                 { type_ = "stringRightOutOfLimit"
-                , code = [ "String.right " ++ toString num ++ " " ++ toString string ]
+                , code =
+                    interpolate """
+String.right {0} {1}
+"""
+                        [ toString num
+                        , toString string
+                        ]
                 , answer = toString (String.right num string)
                 }
             )
@@ -585,7 +764,13 @@ stringDropLeftWithinLimit =
         |> Random.map
             (\( string, num ) ->
                 { type_ = "stringDropLeftWithinLimit"
-                , code = [ "String.dropLeft " ++ toString num ++ " " ++ toString string ]
+                , code =
+                    interpolate """
+String.dropLeft {0} {1}
+"""
+                        [ toString num
+                        , toString string
+                        ]
                 , answer = toString (String.dropLeft num string)
                 }
             )
@@ -603,7 +788,13 @@ stringDropLeftOutOfLimit =
         |> Random.map
             (\( string, num ) ->
                 { type_ = "stringDropLeftOutOfLimit"
-                , code = [ "String.dropLeft " ++ toString num ++ " " ++ toString string ]
+                , code =
+                    interpolate """
+String.dropLeft {0} {1}
+"""
+                        [ toString num
+                        , toString string
+                        ]
                 , answer = toString (String.dropLeft num string)
                 }
             )
@@ -621,7 +812,13 @@ stringDropRightWithinLimit =
         |> Random.map
             (\( string, num ) ->
                 { type_ = "stringDropRightWithinLimit"
-                , code = [ "String.dropRight " ++ toString num ++ " " ++ toString string ]
+                , code =
+                    interpolate """
+String.dropRight {0} {1}
+"""
+                        [ toString num
+                        , toString string
+                        ]
                 , answer = toString (String.dropRight num string)
                 }
             )
@@ -639,7 +836,13 @@ stringDropRightOutOfLimit =
         |> Random.map
             (\( string, num ) ->
                 { type_ = "stringDropRightOutOfLimit"
-                , code = [ "String.dropRight " ++ toString num ++ " " ++ toString string ]
+                , code =
+                    interpolate """
+String.dropRight {0} {1}
+"""
+                        [ toString num
+                        , toString string
+                        ]
                 , answer = toString (String.dropRight num string)
                 }
             )
@@ -657,7 +860,13 @@ listTakeWithinLimit =
         |> Random.map
             (\( list, num ) ->
                 { type_ = "listTakeWithinLimit"
-                , code = [ "List.take " ++ toString num ++ " " ++ toString list ]
+                , code =
+                    interpolate """
+List.take {0} {1}
+"""
+                        [ toString num
+                        , toString list
+                        ]
                 , answer = toString (List.take num list)
                 }
             )
@@ -675,7 +884,13 @@ listTakeOutOfLimit =
         |> Random.map
             (\( list, num ) ->
                 { type_ = "listTakeOutOfLimit"
-                , code = [ "List.take " ++ toString num ++ " " ++ toString list ]
+                , code =
+                    interpolate """
+List.take {0} {1}
+"""
+                        [ toString num
+                        , toString list
+                        ]
                 , answer = toString (List.take num list)
                 }
             )
@@ -693,7 +908,13 @@ listDropWithinLimit =
         |> Random.map
             (\( list, num ) ->
                 { type_ = "listDropWithinLimit"
-                , code = [ "List.drop " ++ toString num ++ " " ++ toString list ]
+                , code =
+                    interpolate """
+List.drop {0} {1}
+"""
+                        [ toString num
+                        , toString list
+                        ]
                 , answer = toString (List.drop num list)
                 }
             )
@@ -711,7 +932,13 @@ listDropOutOfLimit =
         |> Random.map
             (\( list, num ) ->
                 { type_ = "listDropOutOfLimit"
-                , code = [ "List.drop " ++ toString num ++ " " ++ toString list ]
+                , code =
+                    interpolate """
+List.drop {0} {1}
+"""
+                        [ toString num
+                        , toString list
+                        ]
                 , answer = toString (List.drop num list)
                 }
             )
@@ -723,11 +950,15 @@ function =
         (\num1 num2 ->
             { type_ = "function"
             , code =
-                [ "hello a b ="
-                , "    a + b"
-                , ""
-                , "hello " ++ toString num1 ++ " " ++ toString num2
-                ]
+                interpolate """
+hello a b =
+    a + b
+
+hello {0} {1}
+"""
+                    [ toString num1
+                    , toString num2
+                    ]
             , answer = toString (num1 + num2)
             }
         )
@@ -741,14 +972,18 @@ letAndFunction =
         (\num1 num2 ->
             { type_ = "letAndFunction"
             , code =
-                [ "hello a b ="
-                , "    a + b"
-                , ""
-                , "let"
-                , "    a = " ++ toString num1
-                , "in"
-                , "    hello a " ++ toString num2
-                ]
+                interpolate """
+hello a b =
+    a + b
+
+let
+    a = {0}
+in
+    hello a {1}
+"""
+                    [ toString num1
+                    , toString num2
+                    ]
             , answer = toString (num1 + num2)
             }
         )
@@ -762,15 +997,19 @@ twoLetAndFunction =
         (\num1 num2 ->
             { type_ = "twoLetAndFunction"
             , code =
-                [ "hello a b ="
-                , "    a + b"
-                , ""
-                , "let"
-                , "    a = " ++ toString num1
-                , "    b = " ++ toString num2
-                , "in"
-                , "    hello a b"
-                ]
+                interpolate """
+hello a b =
+    a + b
+
+let
+    a = {0}
+    b = {1}
+in
+    hello a b
+"""
+                    [ toString num1
+                    , toString num2
+                    ]
             , answer = toString (num1 + num2)
             }
         )
@@ -784,14 +1023,19 @@ twoFunctions =
         (\num1 num2 num3 ->
             { type_ = "twoFunctions"
             , code =
-                [ "hello a b ="
-                , "    a + b"
-                , ""
-                , "hi a b ="
-                , "    a * b"
-                , ""
-                , "hello " ++ toString num1 ++ " (hi " ++ toString num2 ++ " " ++ toString num3 ++ ")"
-                ]
+                interpolate """
+hello a b =
+    a + b
+
+hi a b =
+    a * b
+
+hello {0} (hi {1} {2})
+"""
+                    [ toString num1
+                    , toString num2
+                    , toString num3
+                    ]
             , answer = toString (num1 + num2 * num3)
             }
         )
@@ -806,17 +1050,22 @@ twoFunctionsLet =
         (\num1 num2 num3 ->
             { type_ = "twoFunctionsLet"
             , code =
-                [ "hello a b ="
-                , "    a + b"
-                , ""
-                , "hi a b ="
-                , "    a * b"
-                , ""
-                , "let"
-                , "    a = hi " ++ toString num2 ++ " " ++ toString num3
-                , "in"
-                , "    hello a " ++ toString num1
-                ]
+                interpolate """
+hello a b =
+    a + b
+
+hi a b =
+    a * b
+
+let
+    a = hi {1} {2}
+in
+    hello a {0}
+"""
+                    [ toString num1
+                    , toString num2
+                    , toString num3
+                    ]
             , answer = toString (num1 + num2 * num3)
             }
         )
@@ -831,14 +1080,18 @@ twoFunctionsInc =
         (\num1 num2 ->
             { type_ = "twoFunctionsInc"
             , code =
-                [ "hello a b ="
-                , "    a + b"
-                , ""
-                , "hi a b ="
-                , "    hello a (b + 1)"
-                , ""
-                , "hi " ++ toString num1 ++ " " ++ toString num2
-                ]
+                interpolate """
+hello a b =
+    a + b
+
+hi a b =
+    hello a (b + 1)
+
+hi {0} {1}
+"""
+                    [ toString num1
+                    , toString num2
+                    ]
             , answer = toString (num1 + num2 + 1)
             }
         )
@@ -852,13 +1105,22 @@ twoIfLessThan =
         (\num1 num2 num3 num4 num5 num6 num7 ->
             { type_ = "twoIfLessThan"
             , code =
-                [ "if " ++ toString num1 ++ " < " ++ toString num2 ++ " then"
-                , "    " ++ toString num3
-                , "else if " ++ toString num4 ++ " < " ++ toString num5 ++ " then"
-                , "    " ++ toString num6
-                , "else"
-                , "    " ++ toString num7
-                ]
+                interpolate """
+if {0} < {1} then
+    {2}
+else if {3} < {4} then
+    {5}
+else
+    {6}
+"""
+                    [ toString num1
+                    , toString num2
+                    , toString num3
+                    , toString num4
+                    , toString num5
+                    , toString num6
+                    , toString num7
+                    ]
             , answer =
                 toString
                     (if num1 < num2 then
@@ -885,14 +1147,20 @@ functionIfLessThan =
         (\num1 num2 num3 num4 ->
             { type_ = "functionIfLessThan"
             , code =
-                [ "hello a b ="
-                , "    if a < b then"
-                , "        " ++ toString num1
-                , "    else"
-                , "        " ++ toString num2
-                , ""
-                , "hello " ++ toString num3 ++ " " ++ toString num4
-                ]
+                interpolate """
+hello a b =
+    if a < b then
+        {0}
+    else
+        {1}
+
+hello {2} {3}
+"""
+                    [ toString num1
+                    , toString num2
+                    , toString num3
+                    , toString num4
+                    ]
             , answer =
                 toString
                     (if num3 < num4 then
