@@ -17354,6 +17354,251 @@ var _user$project$Main$viewLastAttempt = F2(
 				}
 			});
 	});
+var _user$project$Main$viewProgress = F2(
+	function (all, currentExercises) {
+		var current = _elm_lang$core$List$length(currentExercises);
+		var done = all - current;
+		var donePercent = (_elm_lang$core$Basics$toFloat(done) * 100) / _elm_lang$core$Basics$toFloat(all);
+		return _elm_lang$core$Native_Utils.eq(current, 0) ? _elm_lang$html$Html$text('') : A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('meter'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$span,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$style(
+							{
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: 'width',
+									_1: A2(
+										_elm_lang$core$Basics_ops['++'],
+										_elm_lang$core$Basics$toString(donePercent),
+										'%')
+								},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'transition', _1: 'width 0.3s'},
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {ctor: '[]'}
+					},
+					{ctor: '[]'}),
+				_1: {ctor: '[]'}
+			});
+	});
+var _user$project$Main$exercises = {
+	ctor: '::',
+	_0: _user$project$Exercise$plus,
+	_1: {
+		ctor: '::',
+		_0: _user$project$Exercise$minusPositive,
+		_1: {
+			ctor: '::',
+			_0: _user$project$Exercise$minusNegative,
+			_1: {
+				ctor: '::',
+				_0: _user$project$Exercise$times,
+				_1: {
+					ctor: '::',
+					_0: _user$project$Exercise$letAndPlus,
+					_1: {
+						ctor: '::',
+						_0: _user$project$Exercise$twoLetAndPlus,
+						_1: {
+							ctor: '::',
+							_0: _user$project$Exercise$concatStrings,
+							_1: {
+								ctor: '::',
+								_0: _user$project$Exercise$concatNumberStrings,
+								_1: {
+									ctor: '::',
+									_0: _user$project$Exercise$concatLists,
+									_1: {
+										ctor: '::',
+										_0: _user$project$Exercise$numberToString,
+										_1: {
+											ctor: '::',
+											_0: _user$project$Exercise$sameNumberEquality,
+											_1: {
+												ctor: '::',
+												_0: _user$project$Exercise$numberEquality,
+												_1: {
+													ctor: '::',
+													_0: _user$project$Exercise$numberInequality,
+													_1: {
+														ctor: '::',
+														_0: _user$project$Exercise$numberLessThan,
+														_1: {
+															ctor: '::',
+															_0: _user$project$Exercise$numberGreaterThan,
+															_1: {
+																ctor: '::',
+																_0: _user$project$Exercise$numberGreaterThanOrEqual,
+																_1: {
+																	ctor: '::',
+																	_0: _user$project$Exercise$numberLessThanOrEqual,
+																	_1: {
+																		ctor: '::',
+																		_0: _user$project$Exercise$stringEquality,
+																		_1: {
+																			ctor: '::',
+																			_0: _user$project$Exercise$stringInequality,
+																			_1: {
+																				ctor: '::',
+																				_0: _user$project$Exercise$not_,
+																				_1: {
+																					ctor: '::',
+																					_0: _user$project$Exercise$notNumberEquality,
+																					_1: {
+																						ctor: '::',
+																						_0: _user$project$Exercise$stringLength,
+																						_1: {
+																							ctor: '::',
+																							_0: _user$project$Exercise$listLength,
+																							_1: {
+																								ctor: '::',
+																								_0: _user$project$Exercise$stringDropLeftWithinLimit,
+																								_1: {
+																									ctor: '::',
+																									_0: _user$project$Exercise$stringDropLeftOutOfLimit,
+																									_1: {
+																										ctor: '::',
+																										_0: _user$project$Exercise$stringDropRightWithinLimit,
+																										_1: {
+																											ctor: '::',
+																											_0: _user$project$Exercise$stringDropRightOutOfLimit,
+																											_1: {
+																												ctor: '::',
+																												_0: _user$project$Exercise$stringLeftWithinLimit,
+																												_1: {
+																													ctor: '::',
+																													_0: _user$project$Exercise$stringLeftOutOfLimit,
+																													_1: {
+																														ctor: '::',
+																														_0: _user$project$Exercise$stringRightWithinLimit,
+																														_1: {
+																															ctor: '::',
+																															_0: _user$project$Exercise$stringRightOutOfLimit,
+																															_1: {
+																																ctor: '::',
+																																_0: _user$project$Exercise$listTakeWithinLimit,
+																																_1: {
+																																	ctor: '::',
+																																	_0: _user$project$Exercise$listTakeOutOfLimit,
+																																	_1: {
+																																		ctor: '::',
+																																		_0: _user$project$Exercise$listDropWithinLimit,
+																																		_1: {
+																																			ctor: '::',
+																																			_0: _user$project$Exercise$listDropOutOfLimit,
+																																			_1: {
+																																				ctor: '::',
+																																				_0: _user$project$Exercise$ifEqual,
+																																				_1: {
+																																					ctor: '::',
+																																					_0: _user$project$Exercise$ifNotEqual,
+																																					_1: {
+																																						ctor: '::',
+																																						_0: _user$project$Exercise$ifLessThan,
+																																						_1: {
+																																							ctor: '::',
+																																							_0: _user$project$Exercise$ifGreaterThan,
+																																							_1: {
+																																								ctor: '::',
+																																								_0: _user$project$Exercise$ifLessThanOrEqual,
+																																								_1: {
+																																									ctor: '::',
+																																									_0: _user$project$Exercise$ifGreaterThanOrEqual,
+																																									_1: {
+																																										ctor: '::',
+																																										_0: _user$project$Exercise$function,
+																																										_1: {
+																																											ctor: '::',
+																																											_0: _user$project$Exercise$letAndFunction,
+																																											_1: {
+																																												ctor: '::',
+																																												_0: _user$project$Exercise$twoLetAndFunction,
+																																												_1: {
+																																													ctor: '::',
+																																													_0: _user$project$Exercise$twoFunctionsLet,
+																																													_1: {
+																																														ctor: '::',
+																																														_0: _user$project$Exercise$twoFunctions,
+																																														_1: {
+																																															ctor: '::',
+																																															_0: _user$project$Exercise$twoFunctionsInc,
+																																															_1: {
+																																																ctor: '::',
+																																																_0: _user$project$Exercise$twoIfLessThan,
+																																																_1: {
+																																																	ctor: '::',
+																																																	_0: _user$project$Exercise$functionIfLessThan,
+																																																	_1: {ctor: '[]'}
+																																																}
+																																															}
+																																														}
+																																													}
+																																												}
+																																											}
+																																										}
+																																									}
+																																								}
+																																							}
+																																						}
+																																					}
+																																				}
+																																			}
+																																		}
+																																	}
+																																}
+																															}
+																														}
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+};
+var _user$project$Main$defaultBgColor = A3(_elm_lang$core$Color$rgb, 116, 190, 254);
+var _user$project$Main$greenBgColor = A3(_elm_lang$core$Color$rgb, 173, 255, 0);
+var _user$project$Main$Model = F6(
+	function (a, b, c, d, e, f) {
+		return {exercises: a, allExercises: b, answerInput: c, lastAttempt: d, lastAttemptState: e, currentExerciseState: f};
+	});
+var _user$project$Main$StartAgain = {ctor: 'StartAgain'};
 var _user$project$Main$viewWin = A2(
 	_elm_lang$html$Html$div,
 	{
@@ -17448,10 +17693,33 @@ var _user$project$Main$viewWin = A2(
 								},
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html$text('here!'),
+									_0: _elm_lang$html$Html$text('here'),
 									_1: {ctor: '[]'}
 								}),
-							_1: {ctor: '[]'}
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(' or '),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$a,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$StartAgain),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$href('#'),
+												_1: {ctor: '[]'}
+											}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('play again!'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}
 						}
 					}),
 				_1: {
@@ -17482,7 +17750,7 @@ var _user$project$Main$viewWin = A2(
 									}),
 								_1: {
 									ctor: '::',
-									_0: _elm_lang$html$Html$text(')'),
+									_0: _elm_lang$html$Html$text('.)'),
 									_1: {ctor: '[]'}
 								}
 							}
@@ -17491,53 +17759,6 @@ var _user$project$Main$viewWin = A2(
 				}
 			}
 		}
-	});
-var _user$project$Main$viewProgress = F2(
-	function (all, currentExercises) {
-		var current = _elm_lang$core$List$length(currentExercises);
-		var done = all - current;
-		var donePercent = (_elm_lang$core$Basics$toFloat(done) * 100) / _elm_lang$core$Basics$toFloat(all);
-		return _elm_lang$core$Native_Utils.eq(current, 0) ? _elm_lang$html$Html$text('') : A2(
-			_elm_lang$html$Html$div,
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('meter'),
-				_1: {ctor: '[]'}
-			},
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$span,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$style(
-							{
-								ctor: '::',
-								_0: {
-									ctor: '_Tuple2',
-									_0: 'width',
-									_1: A2(
-										_elm_lang$core$Basics_ops['++'],
-										_elm_lang$core$Basics$toString(donePercent),
-										'%')
-								},
-								_1: {
-									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'transition', _1: 'width 0.3s'},
-									_1: {ctor: '[]'}
-								}
-							}),
-						_1: {ctor: '[]'}
-					},
-					{ctor: '[]'}),
-				_1: {ctor: '[]'}
-			});
-	});
-var _user$project$Main$defaultBgColor = A3(_elm_lang$core$Color$rgb, 116, 190, 254);
-var _user$project$Main$greenBgColor = A3(_elm_lang$core$Color$rgb, 173, 255, 0);
-var _user$project$Main$Model = F6(
-	function (a, b, c, d, e, f) {
-		return {exercises: a, allExercises: b, answerInput: c, lastAttempt: d, lastAttemptState: e, currentExerciseState: f};
 	});
 var _user$project$Main$AnimateCurrentExercise = function (a) {
 	return {ctor: 'AnimateCurrentExercise', _0: a};
@@ -17578,19 +17799,254 @@ var _user$project$Main$focusCurrentAnswer = A2(
 	_elm_lang$core$Task$attempt,
 	_user$project$Main$Focus,
 	_elm_lang$dom$Dom$focus('current-answer'));
+var _user$project$Main$SubmitAnswer = {ctor: 'SubmitAnswer'};
+var _user$project$Main$SetAnswerInput = function (a) {
+	return {ctor: 'SetAnswerInput', _0: a};
+};
+var _user$project$Main$viewExercise = F3(
+	function (currentExerciseState, answerInput, _p2) {
+		var _p3 = _p2;
+		return A2(
+			_elm_lang$html$Html$div,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_mdgriffith$elm_style_animation$Animation$render(currentExerciseState),
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$style(
+						{
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'padding', _1: '16px 16px 32px'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'box-shadow', _1: '0 0 16px 0 #74bdfe'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'margin', _1: '16px'},
+									_1: {ctor: '[]'}
+								}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}),
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$pre,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$style(
+							{
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'font-family', _1: 'Iosevka'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'font-weight', _1: 'bold'},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'margin', _1: '8px 0 16px'},
+										_1: {ctor: '[]'}
+									}
+								}
+							}),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(_p3.code),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$span,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$style(
+								{
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'font-family', _1: 'Iosevka'},
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('='),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$input,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onInput(_user$project$Main$SetAnswerInput),
+								_1: {
+									ctor: '::',
+									_0: _user$project$Main$onEnter(_user$project$Main$SubmitAnswer),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$placeholder('?'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$value(answerInput),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$style(
+													{
+														ctor: '::',
+														_0: {ctor: '_Tuple2', _0: 'font-family', _1: 'Iosevka'},
+														_1: {
+															ctor: '::',
+															_0: {ctor: '_Tuple2', _0: 'margin-left', _1: '8px'},
+															_1: {
+																ctor: '::',
+																_0: {ctor: '_Tuple2', _0: 'font-size', _1: '24px'},
+																_1: {
+																	ctor: '::',
+																	_0: {ctor: '_Tuple2', _0: 'padding-left', _1: '8px'},
+																	_1: {ctor: '[]'}
+																}
+															}
+														}
+													}),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$id('current-answer'),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							},
+							{ctor: '[]'}),
+						_1: {ctor: '[]'}
+					}
+				}
+			});
+	});
+var _user$project$Main$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A3(
+				_elm_lang$html$Html$node,
+				'style',
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('\n\n/* Taken from https://css-tricks.com/css3-progress-bars/ */\n\n.meter {\n    height: 20px;  /* Can be anything */\n    position: relative;\n    margin: 60px 0 20px 0; /* Just for demo spacing */\n    background: #555;\n    -moz-border-radius: 25px;\n    -webkit-border-radius: 25px;\n    border-radius: 25px;\n    padding: 10px;\n    -webkit-box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);\n    -moz-box-shadow   : inset 0 -1px 1px rgba(255,255,255,0.3);\n    box-shadow        : inset 0 -1px 1px rgba(255,255,255,0.3);\n}\n.meter > span {\n    display: block;\n    height: 100%;\n       -webkit-border-top-right-radius: 8px;\n    -webkit-border-bottom-right-radius: 8px;\n           -moz-border-radius-topright: 8px;\n        -moz-border-radius-bottomright: 8px;\n               border-top-right-radius: 8px;\n            border-bottom-right-radius: 8px;\n        -webkit-border-top-left-radius: 20px;\n     -webkit-border-bottom-left-radius: 20px;\n            -moz-border-radius-topleft: 20px;\n         -moz-border-radius-bottomleft: 20px;\n                border-top-left-radius: 20px;\n             border-bottom-left-radius: 20px;\n    background-color: rgb(43,194,83);\n    background-image: -webkit-gradient(\n      linear,\n      left bottom,\n      left top,\n      color-stop(0, rgb(43,194,83)),\n      color-stop(1, rgb(84,240,84))\n     );\n    background-image: -moz-linear-gradient(\n      center bottom,\n      rgb(43,194,83) 37%,\n      rgb(84,240,84) 69%\n     );\n    -webkit-box-shadow:\n      inset 0 2px 9px  rgba(255,255,255,0.3),\n      inset 0 -2px 6px rgba(0,0,0,0.4);\n    -moz-box-shadow:\n      inset 0 2px 9px  rgba(255,255,255,0.3),\n      inset 0 -2px 6px rgba(0,0,0,0.4);\n    box-shadow:\n      inset 0 2px 9px  rgba(255,255,255,0.3),\n      inset 0 -2px 6px rgba(0,0,0,0.4);\n    position: relative;\n    overflow: hidden;\n}\n.meter > span:after, .animate > span > span {\n    content: \"\";\n    position: absolute;\n    top: 0; left: 0; bottom: 0; right: 0;\n    background-image:\n       -webkit-gradient(linear, 0 0, 100% 100%,\n          color-stop(.25, rgba(255, 255, 255, .2)),\n          color-stop(.25, transparent), color-stop(.5, transparent),\n          color-stop(.5, rgba(255, 255, 255, .2)),\n          color-stop(.75, rgba(255, 255, 255, .2)),\n          color-stop(.75, transparent), to(transparent)\n       );\n    background-image:\n        -moz-linear-gradient(\n          -45deg,\n          rgba(255, 255, 255, .2) 25%,\n          transparent 25%,\n          transparent 50%,\n          rgba(255, 255, 255, .2) 50%,\n          rgba(255, 255, 255, .2) 75%,\n          transparent 75%,\n          transparent\n       );\n    z-index: 1;\n    -webkit-background-size: 50px 50px;\n    -moz-background-size: 50px 50px;\n    background-size: 50px 50px;\n    -webkit-animation: move 2s linear infinite;\n    -moz-animation: move 2s linear infinite;\n       -webkit-border-top-right-radius: 8px;\n    -webkit-border-bottom-right-radius: 8px;\n           -moz-border-radius-topright: 8px;\n        -moz-border-radius-bottomright: 8px;\n               border-top-right-radius: 8px;\n            border-bottom-right-radius: 8px;\n        -webkit-border-top-left-radius: 20px;\n     -webkit-border-bottom-left-radius: 20px;\n            -moz-border-radius-topleft: 20px;\n         -moz-border-radius-bottomleft: 20px;\n                border-top-left-radius: 20px;\n             border-bottom-left-radius: 20px;\n    overflow: hidden;\n}\n\n.animate > span:after {\n    display: none;\n}\n\n@-webkit-keyframes move {\n    0% {\n       background-position: 0 0;\n    }\n    100% {\n       background-position: 50px 50px;\n    }\n}\n\n@-moz-keyframes move {\n    0% {\n       background-position: 0 0;\n    }\n    100% {\n       background-position: 50px 50px;\n    }\n}\n\n\n.orange > span {\n    background-color: #f1a165;\n    background-image: -moz-linear-gradient(top, #f1a165, #f36d0a);\n    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #f1a165),color-stop(1, #f36d0a));\n    background-image: -webkit-linear-gradient(#f1a165, #f36d0a);\n}\n\n.red > span {\n    background-color: #f0a3a3;\n    background-image: -moz-linear-gradient(top, #f0a3a3, #f42323);\n    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #f0a3a3),color-stop(1, #f42323));\n    background-image: -webkit-linear-gradient(#f0a3a3, #f42323);\n}\n\n.nostripes > span > span, .nostripes > span:after {\n    -webkit-animation: none;\n    -moz-animation: none;\n    background-image: none;\n}\n'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$style(
+							{
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'display', _1: 'grid'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'grid-template-columns', _1: 'repeat(3,1fr)'},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'font-size', _1: '24px'},
+										_1: {ctor: '[]'}
+									}
+								}
+							}),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$core$Maybe$withDefault,
+							_user$project$Main$viewWin,
+							A2(
+								_elm_lang$core$Maybe$map,
+								A2(_user$project$Main$viewExercise, model.currentExerciseState, model.answerInput),
+								_elm_lang$core$List$head(model.exercises))),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$core$Maybe$withDefault,
+								_elm_lang$html$Html$text(''),
+								A2(
+									_elm_lang$core$Maybe$map,
+									_user$project$Main$viewLastAttempt(model.lastAttemptState),
+									model.lastAttempt)),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(_user$project$Main$viewProgress, model.allExercises, model.exercises),
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+};
+var _user$project$Main$ExercisesGenerated = function (a) {
+	return {ctor: 'ExercisesGenerated', _0: a};
+};
+var _user$project$Main$generateExercises = A2(
+	_mgold$elm_random_pcg$Random_Pcg$generate,
+	_user$project$Main$ExercisesGenerated,
+	A2(
+		_mgold$elm_random_pcg$Random_Pcg$map,
+		_elm_lang$core$List$concat,
+		_kress95$random_pcg_extra$Random_Pcg_Extra$combine(
+			A2(_elm_lang$core$List$map, _user$project$Random_Extra$three, _user$project$Main$exercises))));
+var _user$project$Main$init = {
+	ctor: '_Tuple2',
+	_0: {
+		exercises: {ctor: '[]'},
+		allExercises: 0,
+		answerInput: '',
+		lastAttempt: _elm_lang$core$Maybe$Nothing,
+		lastAttemptState: _mdgriffith$elm_style_animation$Animation$style(
+			{
+				ctor: '::',
+				_0: _mdgriffith$elm_style_animation$Animation$opacity(0),
+				_1: {
+					ctor: '::',
+					_0: A3(
+						_mdgriffith$elm_style_animation$Animation$translate3d,
+						_mdgriffith$elm_style_animation$Animation$px(0),
+						_mdgriffith$elm_style_animation$Animation$px(0),
+						_mdgriffith$elm_style_animation$Animation$px(0)),
+					_1: {ctor: '[]'}
+				}
+			}),
+		currentExerciseState: _mdgriffith$elm_style_animation$Animation$style(
+			{
+				ctor: '::',
+				_0: _mdgriffith$elm_style_animation$Animation$backgroundColor(_user$project$Main$defaultBgColor),
+				_1: {ctor: '[]'}
+			})
+	},
+	_1: _user$project$Main$generateExercises
+};
 var _user$project$Main$update = F2(
 	function (msg, model) {
-		var _p2 = msg;
-		switch (_p2.ctor) {
+		var _p4 = msg;
+		switch (_p4.ctor) {
 			case 'ExercisesGenerated':
-				var _p3 = _p2._0;
+				var _p5 = _p4._0;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							exercises: _p3,
-							allExercises: _elm_lang$core$List$length(_p3)
+							exercises: _p5,
+							allExercises: _elm_lang$core$List$length(_p5)
 						}),
 					_1: _user$project$Main$focusCurrentAnswer
 				};
@@ -17599,7 +18055,7 @@ var _user$project$Main$update = F2(
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{answerInput: _p2._0}),
+						{answerInput: _p4._0}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'SubmitAnswer':
@@ -17609,9 +18065,9 @@ var _user$project$Main$update = F2(
 					false,
 					A2(
 						_elm_lang$core$Maybe$map,
-						function (_p4) {
-							var _p5 = _p4;
-							return _elm_lang$core$Native_Utils.eq(model.answerInput, _p5.answer);
+						function (_p6) {
+							var _p7 = _p6;
+							return _elm_lang$core$Native_Utils.eq(model.answerInput, _p7.answer);
 						},
 						lastExercise));
 				return {
@@ -17880,455 +18336,24 @@ var _user$project$Main$update = F2(
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							lastAttemptState: A2(_mdgriffith$elm_style_animation$Animation$update, _p2._0, model.lastAttemptState)
+							lastAttemptState: A2(_mdgriffith$elm_style_animation$Animation$update, _p4._0, model.lastAttemptState)
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			default:
+			case 'AnimateCurrentExercise':
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							currentExerciseState: A2(_mdgriffith$elm_style_animation$Animation$update, _p2._0, model.currentExerciseState)
+							currentExerciseState: A2(_mdgriffith$elm_style_animation$Animation$update, _p4._0, model.currentExerciseState)
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
+			default:
+				return {ctor: '_Tuple2', _0: model, _1: _user$project$Main$generateExercises};
 		}
 	});
-var _user$project$Main$SubmitAnswer = {ctor: 'SubmitAnswer'};
-var _user$project$Main$SetAnswerInput = function (a) {
-	return {ctor: 'SetAnswerInput', _0: a};
-};
-var _user$project$Main$viewExercise = F3(
-	function (currentExerciseState, answerInput, _p6) {
-		var _p7 = _p6;
-		return A2(
-			_elm_lang$html$Html$div,
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				_mdgriffith$elm_style_animation$Animation$render(currentExerciseState),
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$style(
-						{
-							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'padding', _1: '16px 16px 32px'},
-							_1: {
-								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'box-shadow', _1: '0 0 16px 0 #74bdfe'},
-								_1: {
-									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'margin', _1: '16px'},
-									_1: {ctor: '[]'}
-								}
-							}
-						}),
-					_1: {ctor: '[]'}
-				}),
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$pre,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$style(
-							{
-								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'font-family', _1: 'Iosevka'},
-								_1: {
-									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'font-weight', _1: 'bold'},
-									_1: {
-										ctor: '::',
-										_0: {ctor: '_Tuple2', _0: 'margin', _1: '8px 0 16px'},
-										_1: {ctor: '[]'}
-									}
-								}
-							}),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text(_p7.code),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$span,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$style(
-								{
-									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'font-family', _1: 'Iosevka'},
-									_1: {ctor: '[]'}
-								}),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('='),
-							_1: {ctor: '[]'}
-						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$input,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Events$onInput(_user$project$Main$SetAnswerInput),
-								_1: {
-									ctor: '::',
-									_0: _user$project$Main$onEnter(_user$project$Main$SubmitAnswer),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$placeholder('?'),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$value(answerInput),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$style(
-													{
-														ctor: '::',
-														_0: {ctor: '_Tuple2', _0: 'font-family', _1: 'Iosevka'},
-														_1: {
-															ctor: '::',
-															_0: {ctor: '_Tuple2', _0: 'margin-left', _1: '8px'},
-															_1: {
-																ctor: '::',
-																_0: {ctor: '_Tuple2', _0: 'font-size', _1: '24px'},
-																_1: {
-																	ctor: '::',
-																	_0: {ctor: '_Tuple2', _0: 'padding-left', _1: '8px'},
-																	_1: {ctor: '[]'}
-																}
-															}
-														}
-													}),
-												_1: {
-													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$id('current-answer'),
-													_1: {ctor: '[]'}
-												}
-											}
-										}
-									}
-								}
-							},
-							{ctor: '[]'}),
-						_1: {ctor: '[]'}
-					}
-				}
-			});
-	});
-var _user$project$Main$view = function (model) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{ctor: '[]'},
-		{
-			ctor: '::',
-			_0: A3(
-				_elm_lang$html$Html$node,
-				'style',
-				{ctor: '[]'},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text('\n\n/* Taken from https://css-tricks.com/css3-progress-bars/ */\n\n.meter {\n    height: 20px;  /* Can be anything */\n    position: relative;\n    margin: 60px 0 20px 0; /* Just for demo spacing */\n    background: #555;\n    -moz-border-radius: 25px;\n    -webkit-border-radius: 25px;\n    border-radius: 25px;\n    padding: 10px;\n    -webkit-box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);\n    -moz-box-shadow   : inset 0 -1px 1px rgba(255,255,255,0.3);\n    box-shadow        : inset 0 -1px 1px rgba(255,255,255,0.3);\n}\n.meter > span {\n    display: block;\n    height: 100%;\n       -webkit-border-top-right-radius: 8px;\n    -webkit-border-bottom-right-radius: 8px;\n           -moz-border-radius-topright: 8px;\n        -moz-border-radius-bottomright: 8px;\n               border-top-right-radius: 8px;\n            border-bottom-right-radius: 8px;\n        -webkit-border-top-left-radius: 20px;\n     -webkit-border-bottom-left-radius: 20px;\n            -moz-border-radius-topleft: 20px;\n         -moz-border-radius-bottomleft: 20px;\n                border-top-left-radius: 20px;\n             border-bottom-left-radius: 20px;\n    background-color: rgb(43,194,83);\n    background-image: -webkit-gradient(\n      linear,\n      left bottom,\n      left top,\n      color-stop(0, rgb(43,194,83)),\n      color-stop(1, rgb(84,240,84))\n     );\n    background-image: -moz-linear-gradient(\n      center bottom,\n      rgb(43,194,83) 37%,\n      rgb(84,240,84) 69%\n     );\n    -webkit-box-shadow:\n      inset 0 2px 9px  rgba(255,255,255,0.3),\n      inset 0 -2px 6px rgba(0,0,0,0.4);\n    -moz-box-shadow:\n      inset 0 2px 9px  rgba(255,255,255,0.3),\n      inset 0 -2px 6px rgba(0,0,0,0.4);\n    box-shadow:\n      inset 0 2px 9px  rgba(255,255,255,0.3),\n      inset 0 -2px 6px rgba(0,0,0,0.4);\n    position: relative;\n    overflow: hidden;\n}\n.meter > span:after, .animate > span > span {\n    content: \"\";\n    position: absolute;\n    top: 0; left: 0; bottom: 0; right: 0;\n    background-image:\n       -webkit-gradient(linear, 0 0, 100% 100%,\n          color-stop(.25, rgba(255, 255, 255, .2)),\n          color-stop(.25, transparent), color-stop(.5, transparent),\n          color-stop(.5, rgba(255, 255, 255, .2)),\n          color-stop(.75, rgba(255, 255, 255, .2)),\n          color-stop(.75, transparent), to(transparent)\n       );\n    background-image:\n        -moz-linear-gradient(\n          -45deg,\n          rgba(255, 255, 255, .2) 25%,\n          transparent 25%,\n          transparent 50%,\n          rgba(255, 255, 255, .2) 50%,\n          rgba(255, 255, 255, .2) 75%,\n          transparent 75%,\n          transparent\n       );\n    z-index: 1;\n    -webkit-background-size: 50px 50px;\n    -moz-background-size: 50px 50px;\n    background-size: 50px 50px;\n    -webkit-animation: move 2s linear infinite;\n    -moz-animation: move 2s linear infinite;\n       -webkit-border-top-right-radius: 8px;\n    -webkit-border-bottom-right-radius: 8px;\n           -moz-border-radius-topright: 8px;\n        -moz-border-radius-bottomright: 8px;\n               border-top-right-radius: 8px;\n            border-bottom-right-radius: 8px;\n        -webkit-border-top-left-radius: 20px;\n     -webkit-border-bottom-left-radius: 20px;\n            -moz-border-radius-topleft: 20px;\n         -moz-border-radius-bottomleft: 20px;\n                border-top-left-radius: 20px;\n             border-bottom-left-radius: 20px;\n    overflow: hidden;\n}\n\n.animate > span:after {\n    display: none;\n}\n\n@-webkit-keyframes move {\n    0% {\n       background-position: 0 0;\n    }\n    100% {\n       background-position: 50px 50px;\n    }\n}\n\n@-moz-keyframes move {\n    0% {\n       background-position: 0 0;\n    }\n    100% {\n       background-position: 50px 50px;\n    }\n}\n\n\n.orange > span {\n    background-color: #f1a165;\n    background-image: -moz-linear-gradient(top, #f1a165, #f36d0a);\n    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #f1a165),color-stop(1, #f36d0a));\n    background-image: -webkit-linear-gradient(#f1a165, #f36d0a);\n}\n\n.red > span {\n    background-color: #f0a3a3;\n    background-image: -moz-linear-gradient(top, #f0a3a3, #f42323);\n    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #f0a3a3),color-stop(1, #f42323));\n    background-image: -webkit-linear-gradient(#f0a3a3, #f42323);\n}\n\n.nostripes > span > span, .nostripes > span:after {\n    -webkit-animation: none;\n    -moz-animation: none;\n    background-image: none;\n}\n'),
-					_1: {ctor: '[]'}
-				}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$div,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$style(
-							{
-								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'display', _1: 'grid'},
-								_1: {
-									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'grid-template-columns', _1: 'repeat(3,1fr)'},
-									_1: {
-										ctor: '::',
-										_0: {ctor: '_Tuple2', _0: 'font-size', _1: '24px'},
-										_1: {ctor: '[]'}
-									}
-								}
-							}),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: A2(
-							_elm_lang$core$Maybe$withDefault,
-							_user$project$Main$viewWin,
-							A2(
-								_elm_lang$core$Maybe$map,
-								A2(_user$project$Main$viewExercise, model.currentExerciseState, model.answerInput),
-								_elm_lang$core$List$head(model.exercises))),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$core$Maybe$withDefault,
-								_elm_lang$html$Html$text(''),
-								A2(
-									_elm_lang$core$Maybe$map,
-									_user$project$Main$viewLastAttempt(model.lastAttemptState),
-									model.lastAttempt)),
-							_1: {ctor: '[]'}
-						}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(_user$project$Main$viewProgress, model.allExercises, model.exercises),
-					_1: {ctor: '[]'}
-				}
-			}
-		});
-};
-var _user$project$Main$ExercisesGenerated = function (a) {
-	return {ctor: 'ExercisesGenerated', _0: a};
-};
-var _user$project$Main$init = {
-	ctor: '_Tuple2',
-	_0: {
-		exercises: {ctor: '[]'},
-		allExercises: 0,
-		answerInput: '',
-		lastAttempt: _elm_lang$core$Maybe$Nothing,
-		lastAttemptState: _mdgriffith$elm_style_animation$Animation$style(
-			{
-				ctor: '::',
-				_0: _mdgriffith$elm_style_animation$Animation$opacity(0),
-				_1: {
-					ctor: '::',
-					_0: A3(
-						_mdgriffith$elm_style_animation$Animation$translate3d,
-						_mdgriffith$elm_style_animation$Animation$px(0),
-						_mdgriffith$elm_style_animation$Animation$px(0),
-						_mdgriffith$elm_style_animation$Animation$px(0)),
-					_1: {ctor: '[]'}
-				}
-			}),
-		currentExerciseState: _mdgriffith$elm_style_animation$Animation$style(
-			{
-				ctor: '::',
-				_0: _mdgriffith$elm_style_animation$Animation$backgroundColor(_user$project$Main$defaultBgColor),
-				_1: {ctor: '[]'}
-			})
-	},
-	_1: A2(
-		_mgold$elm_random_pcg$Random_Pcg$generate,
-		_user$project$Main$ExercisesGenerated,
-		A2(
-			_mgold$elm_random_pcg$Random_Pcg$map,
-			_elm_lang$core$List$concat,
-			_kress95$random_pcg_extra$Random_Pcg_Extra$combine(
-				A2(
-					_elm_lang$core$List$map,
-					_user$project$Random_Extra$three,
-					{
-						ctor: '::',
-						_0: _user$project$Exercise$plus,
-						_1: {
-							ctor: '::',
-							_0: _user$project$Exercise$minusPositive,
-							_1: {
-								ctor: '::',
-								_0: _user$project$Exercise$minusNegative,
-								_1: {
-									ctor: '::',
-									_0: _user$project$Exercise$times,
-									_1: {
-										ctor: '::',
-										_0: _user$project$Exercise$letAndPlus,
-										_1: {
-											ctor: '::',
-											_0: _user$project$Exercise$twoLetAndPlus,
-											_1: {
-												ctor: '::',
-												_0: _user$project$Exercise$concatStrings,
-												_1: {
-													ctor: '::',
-													_0: _user$project$Exercise$concatNumberStrings,
-													_1: {
-														ctor: '::',
-														_0: _user$project$Exercise$concatLists,
-														_1: {
-															ctor: '::',
-															_0: _user$project$Exercise$numberToString,
-															_1: {
-																ctor: '::',
-																_0: _user$project$Exercise$sameNumberEquality,
-																_1: {
-																	ctor: '::',
-																	_0: _user$project$Exercise$numberEquality,
-																	_1: {
-																		ctor: '::',
-																		_0: _user$project$Exercise$numberInequality,
-																		_1: {
-																			ctor: '::',
-																			_0: _user$project$Exercise$numberLessThan,
-																			_1: {
-																				ctor: '::',
-																				_0: _user$project$Exercise$numberGreaterThan,
-																				_1: {
-																					ctor: '::',
-																					_0: _user$project$Exercise$numberGreaterThanOrEqual,
-																					_1: {
-																						ctor: '::',
-																						_0: _user$project$Exercise$numberLessThanOrEqual,
-																						_1: {
-																							ctor: '::',
-																							_0: _user$project$Exercise$stringEquality,
-																							_1: {
-																								ctor: '::',
-																								_0: _user$project$Exercise$stringInequality,
-																								_1: {
-																									ctor: '::',
-																									_0: _user$project$Exercise$not_,
-																									_1: {
-																										ctor: '::',
-																										_0: _user$project$Exercise$notNumberEquality,
-																										_1: {
-																											ctor: '::',
-																											_0: _user$project$Exercise$stringLength,
-																											_1: {
-																												ctor: '::',
-																												_0: _user$project$Exercise$listLength,
-																												_1: {
-																													ctor: '::',
-																													_0: _user$project$Exercise$stringDropLeftWithinLimit,
-																													_1: {
-																														ctor: '::',
-																														_0: _user$project$Exercise$stringDropLeftOutOfLimit,
-																														_1: {
-																															ctor: '::',
-																															_0: _user$project$Exercise$stringDropRightWithinLimit,
-																															_1: {
-																																ctor: '::',
-																																_0: _user$project$Exercise$stringDropRightOutOfLimit,
-																																_1: {
-																																	ctor: '::',
-																																	_0: _user$project$Exercise$stringLeftWithinLimit,
-																																	_1: {
-																																		ctor: '::',
-																																		_0: _user$project$Exercise$stringLeftOutOfLimit,
-																																		_1: {
-																																			ctor: '::',
-																																			_0: _user$project$Exercise$stringRightWithinLimit,
-																																			_1: {
-																																				ctor: '::',
-																																				_0: _user$project$Exercise$stringRightOutOfLimit,
-																																				_1: {
-																																					ctor: '::',
-																																					_0: _user$project$Exercise$listTakeWithinLimit,
-																																					_1: {
-																																						ctor: '::',
-																																						_0: _user$project$Exercise$listTakeOutOfLimit,
-																																						_1: {
-																																							ctor: '::',
-																																							_0: _user$project$Exercise$listDropWithinLimit,
-																																							_1: {
-																																								ctor: '::',
-																																								_0: _user$project$Exercise$listDropOutOfLimit,
-																																								_1: {
-																																									ctor: '::',
-																																									_0: _user$project$Exercise$ifEqual,
-																																									_1: {
-																																										ctor: '::',
-																																										_0: _user$project$Exercise$ifNotEqual,
-																																										_1: {
-																																											ctor: '::',
-																																											_0: _user$project$Exercise$ifLessThan,
-																																											_1: {
-																																												ctor: '::',
-																																												_0: _user$project$Exercise$ifGreaterThan,
-																																												_1: {
-																																													ctor: '::',
-																																													_0: _user$project$Exercise$ifLessThanOrEqual,
-																																													_1: {
-																																														ctor: '::',
-																																														_0: _user$project$Exercise$ifGreaterThanOrEqual,
-																																														_1: {
-																																															ctor: '::',
-																																															_0: _user$project$Exercise$function,
-																																															_1: {
-																																																ctor: '::',
-																																																_0: _user$project$Exercise$letAndFunction,
-																																																_1: {
-																																																	ctor: '::',
-																																																	_0: _user$project$Exercise$twoLetAndFunction,
-																																																	_1: {
-																																																		ctor: '::',
-																																																		_0: _user$project$Exercise$twoFunctionsLet,
-																																																		_1: {
-																																																			ctor: '::',
-																																																			_0: _user$project$Exercise$twoFunctions,
-																																																			_1: {
-																																																				ctor: '::',
-																																																				_0: _user$project$Exercise$twoFunctionsInc,
-																																																				_1: {
-																																																					ctor: '::',
-																																																					_0: _user$project$Exercise$twoIfLessThan,
-																																																					_1: {
-																																																						ctor: '::',
-																																																						_0: _user$project$Exercise$functionIfLessThan,
-																																																						_1: {ctor: '[]'}
-																																																					}
-																																																				}
-																																																			}
-																																																		}
-																																																	}
-																																																}
-																																															}
-																																														}
-																																													}
-																																												}
-																																											}
-																																										}
-																																									}
-																																								}
-																																							}
-																																						}
-																																					}
-																																				}
-																																			}
-																																		}
-																																	}
-																																}
-																															}
-																														}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}))))
-};
 var _user$project$Main$main = _elm_lang$html$Html$program(
 	{init: _user$project$Main$init, update: _user$project$Main$update, view: _user$project$Main$view, subscriptions: _user$project$Main$subscriptions})();
 var Elm = {};

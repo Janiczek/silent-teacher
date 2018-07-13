@@ -42,6 +42,7 @@ type Msg
     | Focus (Result Dom.Error ())
     | AnimateLastAttempt Animation.Msg
     | AnimateCurrentExercise Animation.Msg
+    | StartAgain
 
 
 greenBgColor : Color
@@ -69,62 +70,72 @@ init =
             Animation.style
                 [ Animation.backgroundColor defaultBgColor ]
       }
-    , Random.generate ExercisesGenerated
-        ([ Exercise.plus
-         , Exercise.minusPositive
-         , Exercise.minusNegative
-         , Exercise.times
-         , Exercise.letAndPlus
-         , Exercise.twoLetAndPlus
-         , Exercise.concatStrings
-         , Exercise.concatNumberStrings
-         , Exercise.concatLists
-         , Exercise.numberToString
-         , Exercise.sameNumberEquality
-         , Exercise.numberEquality
-         , Exercise.numberInequality
-         , Exercise.numberLessThan
-         , Exercise.numberGreaterThan
-         , Exercise.numberGreaterThanOrEqual
-         , Exercise.numberLessThanOrEqual
-         , Exercise.stringEquality
-         , Exercise.stringInequality
-         , Exercise.not_
-         , Exercise.notNumberEquality
-         , Exercise.stringLength
-         , Exercise.listLength
-         , Exercise.stringDropLeftWithinLimit
-         , Exercise.stringDropLeftOutOfLimit
-         , Exercise.stringDropRightWithinLimit
-         , Exercise.stringDropRightOutOfLimit
-         , Exercise.stringLeftWithinLimit
-         , Exercise.stringLeftOutOfLimit
-         , Exercise.stringRightWithinLimit
-         , Exercise.stringRightOutOfLimit
-         , Exercise.listTakeWithinLimit
-         , Exercise.listTakeOutOfLimit
-         , Exercise.listDropWithinLimit
-         , Exercise.listDropOutOfLimit
-         , Exercise.ifEqual
-         , Exercise.ifNotEqual
-         , Exercise.ifLessThan
-         , Exercise.ifGreaterThan
-         , Exercise.ifLessThanOrEqual
-         , Exercise.ifGreaterThanOrEqual
-         , Exercise.function
-         , Exercise.letAndFunction
-         , Exercise.twoLetAndFunction
-         , Exercise.twoFunctionsLet
-         , Exercise.twoFunctions
-         , Exercise.twoFunctionsInc
-         , Exercise.twoIfLessThan
-         , Exercise.functionIfLessThan
-         ]
+    , generateExercises
+    )
+
+
+exercises : List (Generator Exercise)
+exercises =
+    [ Exercise.plus
+    , Exercise.minusPositive
+    , Exercise.minusNegative
+    , Exercise.times
+    , Exercise.letAndPlus
+    , Exercise.twoLetAndPlus
+    , Exercise.concatStrings
+    , Exercise.concatNumberStrings
+    , Exercise.concatLists
+    , Exercise.numberToString
+    , Exercise.sameNumberEquality
+    , Exercise.numberEquality
+    , Exercise.numberInequality
+    , Exercise.numberLessThan
+    , Exercise.numberGreaterThan
+    , Exercise.numberGreaterThanOrEqual
+    , Exercise.numberLessThanOrEqual
+    , Exercise.stringEquality
+    , Exercise.stringInequality
+    , Exercise.not_
+    , Exercise.notNumberEquality
+    , Exercise.stringLength
+    , Exercise.listLength
+    , Exercise.stringDropLeftWithinLimit
+    , Exercise.stringDropLeftOutOfLimit
+    , Exercise.stringDropRightWithinLimit
+    , Exercise.stringDropRightOutOfLimit
+    , Exercise.stringLeftWithinLimit
+    , Exercise.stringLeftOutOfLimit
+    , Exercise.stringRightWithinLimit
+    , Exercise.stringRightOutOfLimit
+    , Exercise.listTakeWithinLimit
+    , Exercise.listTakeOutOfLimit
+    , Exercise.listDropWithinLimit
+    , Exercise.listDropOutOfLimit
+    , Exercise.ifEqual
+    , Exercise.ifNotEqual
+    , Exercise.ifLessThan
+    , Exercise.ifGreaterThan
+    , Exercise.ifLessThanOrEqual
+    , Exercise.ifGreaterThanOrEqual
+    , Exercise.function
+    , Exercise.letAndFunction
+    , Exercise.twoLetAndFunction
+    , Exercise.twoFunctionsLet
+    , Exercise.twoFunctions
+    , Exercise.twoFunctionsInc
+    , Exercise.twoIfLessThan
+    , Exercise.functionIfLessThan
+    ]
+
+
+generateExercises : Cmd Msg
+generateExercises =
+    Random.generate ExercisesGenerated
+        (exercises
             |> List.map Random.Extra.three
             |> RandomExtra.combine
             |> Random.map List.concat
         )
-    )
 
 
 focusCurrentAnswer : Cmd Msg
@@ -233,6 +244,11 @@ update msg model =
         AnimateCurrentExercise animMsg ->
             ( { model | currentExerciseState = Animation.update animMsg model.currentExerciseState }
             , Cmd.none
+            )
+
+        StartAgain ->
+            ( model
+            , generateExercises
             )
 
 
@@ -466,7 +482,13 @@ viewWin =
                 [ HA.target "_blank"
                 , HA.href "https://code.org/learn"
                 ]
-                [ H.text "here!" ]
+                [ H.text "here" ]
+            , H.text " or "
+            , H.a
+                [ HE.onClick StartAgain
+                , HA.href "#"
+                ]
+                [ H.text "play again!" ]
             ]
         , H.small []
             [ H.text "(This app was inspired by "
@@ -475,7 +497,7 @@ viewWin =
                 , HA.href "https://silentteacher.toxicode.fr/hourofcode"
                 ]
                 [ H.text "Silent Teacher" ]
-            , H.text ")"
+            , H.text ".)"
             ]
         ]
 
